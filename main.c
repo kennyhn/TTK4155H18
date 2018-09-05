@@ -1,9 +1,9 @@
-#define F_CPU 16000000 //tilfeldig verdi cpu
-
+#define F_CPU 4915200 
 #include <util/delay.h>
 #include <avr/io.h>
 #include <stdio.h>
 #include "uart.h"
+#include "sram.h"
 
 
 int main(){
@@ -16,8 +16,11 @@ int main(){
         _delay_ms(2); 
         
     }*/
-    USART_test();
-    
+    //USART_test();
+    USART_Init(MYUBRR);
+
+    SRAM_test();
+
     return 0;
 }
 
