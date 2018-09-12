@@ -8,5 +8,6 @@ void SRAM_test(void);
 
 //void LATCH_test(void);
 
+void GAL_test(void);
 
 #endif
