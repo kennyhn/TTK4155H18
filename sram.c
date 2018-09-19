@@ -5,6 +5,7 @@
 #include <avr/io.h>
 
 
+
 void SRAM_test(void){
     volatile char *ext_ram = (char *) 0x1800; //Start adress for the SRAM
     uint16_t ext_ram_size = 0x800;
@@ -67,7 +68,7 @@ void SRAM_test(void){
 }*/
 
 void GAL_test(void){
-    DDRC |= (0b11<<DDC2); //Setter DDC2-3 til write-modus
+    DDRC |= (0b111<<DDC1); //Setter DDC1-3 til write-modus
     PORTC &= (!(1<<PORTC3));
     PORTC |= (1<<PORTC2);
     DDRD |= (1 << DDD7);

@@ -3,24 +3,20 @@
 #include <avr/io.h>
 #include "adc.h"
 
-typedef enum Joystick_direction{LEFT, RIGHT, UP, DOWN,NEUTRAL}joystick_direction;
-typedef struct Joystick_perc_angle{
-    int8_t X_value;
-    int8_t Y_value;
-}joystick_perc_angle;
+
 
 void joystick_y_axis(uint8_t *adc){
     _delay_ms(1);
     *adc = 0x04;
     _delay_ms(60);
-     printf("%d\n",*adc);
+     //printf("%d\n",*adc);
 }
 
 void joystick_x_axis(uint8_t *adc){
     _delay_ms(1);
     *adc = 0x05;
     _delay_ms(60);
-     printf("%d\n",*adc);
+     //printf("%d\n",*adc);
 }
 
 // L-slider midten nede
@@ -46,8 +42,25 @@ void run_joystick(){
     volatile uint8_t *adc = (uint8_t*) 0x1400;
     //joystick_y_axis(adc);
     //joystick_x_axis(adc);
-    //r_slider(adc);
+    r_slider(adc);
     //l_slider(adc);
+    /*joystick_direction test = check_joystick_direction(adc);
+    if (test == 0){
+        printf("left\n");
+    }
+    else if (test == 1){
+        printf("right\n");
+    }
+    else if (test == 2){
+        printf("up\n");
+    }
+    else if (test == 3){
+        printf("down\n");
+    }
+    else{
+        printf("neutral\n");
+    }*/
+    //printf("%d\n", check_joystick_direction(adc));
 
 }
 
@@ -62,6 +75,8 @@ joystick_perc_angle get_perc_angle(uint8_t *adc){
     jpa.Y_value = ((double)*adc - neutral)/(255 - neutral)*100;
     return jpa;
 }
+
+
 
 joystick_direction check_joystick_direction(uint8_t *adc){
     joystick_perc_angle jpa = get_perc_angle(adc);

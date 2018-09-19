@@ -17,11 +17,13 @@ int main(){
         _delay_ms(2);
 
     }*/
+
     //USART_test();
     USART_Init(MYUBRR);
-    while(1){
+    /*while(1){
         run_joystick();
-    }
+    }*/
+    oled_driver();
 
     //SRAM_test();
     //GAL_test();
