@@ -78,8 +78,10 @@ void oled_write_character_font4(char letter){
     }
 }
 
+// Må lage nye write funksjoner for SRAM her som funker til menyen
 
-void oled_goto_line(uint8_t line){ //0-7 lines
+
+void oled_goto_line(uint8_t line){ //0-7 lines/pages
     *oled_command=0xb0+line;//setting start page to line
 }
 void oled_goto_column(uint8_t column){ //0-127 columns
@@ -120,24 +122,27 @@ void oled_print8(char* word){
 }
 
 void draw_circle(uint8_t x0, uint8_t y0, uint8_t r){
+    SRAM_OLED_reset();
     //oled_reset();
-    //uint8_t prev_x = 9999;
-    /*for(uint8_t x = x0-r; x<= x0 + r; x++){
+
+    for(uint8_t x = x0-r; x<= x0 + r; x++){
         uint8_t y = sqrt(pow(r,2)-pow((x-x0),2)) + y0;
         print_pixel(x,y);
         y = -sqrt(pow(r,2)-pow((x-x0),2)) + y0;
         print_pixel(x,y);
-        //prev_x = x;
-    }*/
+
+    }
     for(uint8_t y = y0-r; y<= y0 + r; y++){
         uint8_t x = sqrt(pow(r,2)-pow((y-y0),2)) + x0;
         print_pixel(x,y);
         x = -sqrt(pow(r,2)-pow((y-y0),2)) + x0;
         print_pixel(x,y);
     }
+    SRAM_writes_to_screen();
 }
 
 void draw_line(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2){
+    SRAM_OLED_reset();
     double a = (y2-y1) / (double)(x2-x1);
     if(a < 1){
         for (int x = x1; x<x2 +1; x++){
@@ -151,11 +156,14 @@ void draw_line(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2){
             print_pixel(x,y);
         }
     }
+    SRAM_writes_to_screen();
+
 }
 
 void print_pixel(uint8_t x, uint8_t y){
     uint8_t row = y/8;
     uint8_t column = x;
-    oled_pos(row,column);
-    *oled_data |=(1<<(y%8));
+    //oled_pos(row,column);
+    //*oled_data |=(1<<(y%8));
+    SRAM_write(row,column,SRAM_read(row,column)|(1<<(y%8)));
 }

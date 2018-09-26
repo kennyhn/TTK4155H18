@@ -12,8 +12,8 @@ int main(){
     USART_Init(MYUBRR);
     MCUCR = MCUCR|(1<<SRE); //activate XMEM
     oled_init();
-    menu_driver();
-    //draw_circle(50,25,20);
+    //menu_driver();
+    draw_circle(50,25,20);
     //draw_line(30,30,10,30);
     return 0;
 }

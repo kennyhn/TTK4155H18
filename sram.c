@@ -2,6 +2,7 @@
 #include <util/delay.h>
 
 #include "sram.h"
+#include "oled.h"
 #include <avr/io.h>
 
 
@@ -11,7 +12,7 @@ void SRAM_test(void){
     uint16_t ext_ram_size = 0x800;
     uint16_t write_errors = 0;
     uint16_t retrieval_errors = 0;
-    //MCUCR = MCUCR|(1<<SRE); //activate XMEM
+    MCUCR = MCUCR|(1<<SRE); //activate XMEM
     printf("Starting SRAM test... \n");
 
     uint16_t seed = rand();
@@ -38,6 +39,42 @@ void SRAM_test(void){
         }
     }
     printf("SRAM test completed with \n%4d errors in write phase and \n%4d errors in retrieval phase \n\n", write_errors, retrieval_errors);
+}
+
+void SRAM_OLED_reset(){ //empties the screen mem space in SRAM
+    volatile char *ext_ram=(char*)0x1BFF;
+    uint16_t ext_ram_size = 0x400;
+    for (int i = 0; i<ext_ram_size;i++){
+        ext_ram[i]=0;
+    }
+}
+
+void SRAM_write(uint8_t page, uint8_t column, uint8_t screen_data){ //writes to SRAM the data in given page and column
+    volatile char *ext_ram= (char *) 0x1BFF; //start address for the screen in SRAM
+    uint16_t ext_ram_size = 0x400; //size of memspace for screen
+    ext_ram[page*128+column]=screen_data;
+    //ext_rad[adress] = screen data;
+}
+
+
+
+void SRAM_writes_to_screen(){
+    volatile char *ext_ram= (char *) 0x1BFF; //start address for the screen in SRAM
+    uint16_t ext_ram_size = 0x400; //size of memspace for screen
+    volatile char *oled_data = (char*) 0x1200;
+    int j = 0;
+    for(int i = 0; i<ext_ram_size; i++){
+        if (i%128==0){
+            oled_pos(j,0);
+            j++;
+        }
+        *oled_data = ext_ram[i];
+    }
+}
+
+uint8_t SRAM_read(uint8_t page, uint8_t column){
+    volatile char *ext_ram= (char *) 0x1BFF; //start address for the screen in SRAM
+    return ext_ram[page*128+column];
 }
 
 
