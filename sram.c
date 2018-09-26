@@ -11,7 +11,7 @@ void SRAM_test(void){
     uint16_t ext_ram_size = 0x800;
     uint16_t write_errors = 0;
     uint16_t retrieval_errors = 0;
-    MCUCR = MCUCR|(1<<SRE); //activate XMEM
+    //MCUCR = MCUCR|(1<<SRE); //activate XMEM
     printf("Starting SRAM test... \n");
 
     uint16_t seed = rand();
@@ -39,7 +39,6 @@ void SRAM_test(void){
     }
     printf("SRAM test completed with \n%4d errors in write phase and \n%4d errors in retrieval phase \n\n", write_errors, retrieval_errors);
 }
-
 
 
 /*void LATCH_test(void){

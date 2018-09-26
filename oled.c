@@ -1,12 +1,15 @@
 #define F_CPU 4915200
 #include <util/delay.h>
 #include <avr/io.h>
+#include <math.h>
 
 #include "oled.h"
 #include "fonts.h"
 
 volatile char *oled_command = (char*) 0x1000;
 volatile char *oled_data = (char*) 0x1200;
+
+
 
 void write_c(char data){
     *oled_command = data;
@@ -26,7 +29,6 @@ void oled_reset(void){
 }
 
 void oled_init(){
-    MCUCR = MCUCR|(1<<SRE); //activate XMEM
 
     write_c(0xae);        //  display  off
     write_c(0xa1);        //segment  remap
@@ -54,6 +56,7 @@ void oled_init(){
     oled_reset();
 }
 
+
 void oled_write_character_font8(char letter){
     char letterline = letter - ' ';
     for(int i = 0; i<8; i++){
@@ -61,13 +64,27 @@ void oled_write_character_font8(char letter){
     }
 }
 
-void oled_home();
-void oled_goto_line(uint8_t line){
+void oled_write_character_font5(char letter){
+    char letterline = letter - ' ';
+    for(int i = 0; i<5; i++){
+        *oled_data=pgm_read_byte(&font5[letterline][i]);
+    }
+}
+
+void oled_write_character_font4(char letter){
+    char letterline = letter - ' ';
+    for(int i = 0; i<4; i++){
+        *oled_data=pgm_read_byte(&font4[letterline][i]);
+    }
+}
+
+
+void oled_goto_line(uint8_t line){ //0-7 lines
     *oled_command=0xb0+line;//setting start page to line
 }
-void oled_goto_column(uint8_t column){
-    *oled_command=(0x0F&column);
-    *oled_command=(0x10|(column>>4));
+void oled_goto_column(uint8_t column){ //0-127 columns
+    *oled_command=(0x0F&column); //setting lower column to the column number
+    *oled_command=(0x10|(column>>4)); //setting upper column to the column number
 }
 
 void oled_clear_line(uint8_t line){
@@ -85,21 +102,60 @@ void oled_pos(uint8_t row, uint8_t column) {
     oled_goto_line(row);
 }
 
-void oled_print(char* word){
-    char letterline = letter - ' ';
-    for(int i = 0; i<8; i++){
-        *oled_data=pgm_read_byte(&font8[letterline][i]);
+void oled_print4(char* word){
+    for(int i = 0; word[i]!='\0';i++){
+        oled_write_character_font4(word[i]);
     }
-
 }
 
-void oled_driver(void){
-    oled_init();
-    oled_reset();
-    *oled_command=0x00;//setting lower start column
-    *oled_command=0x10;//setting upper start column
-    //*oled_command=0x40;//setting display start line
-    oled_goto_column(63);
-    oled_goto_line(5);//setting start page0
-    oled_write_character_font8('a');
+void oled_print5(char* word){
+    for(int i = 0; word[i]!='\0';i++){
+        oled_write_character_font5(word[i]);
+    }
+}
+void oled_print8(char* word){
+    for(int i = 0; word[i]!='\0';i++){
+        oled_write_character_font8(word[i]);
+    }
+}
+
+void draw_circle(uint8_t x0, uint8_t y0, uint8_t r){
+    //oled_reset();
+    //uint8_t prev_x = 9999;
+    /*for(uint8_t x = x0-r; x<= x0 + r; x++){
+        uint8_t y = sqrt(pow(r,2)-pow((x-x0),2)) + y0;
+        print_pixel(x,y);
+        y = -sqrt(pow(r,2)-pow((x-x0),2)) + y0;
+        print_pixel(x,y);
+        //prev_x = x;
+    }*/
+    for(uint8_t y = y0-r; y<= y0 + r; y++){
+        uint8_t x = sqrt(pow(r,2)-pow((y-y0),2)) + x0;
+        print_pixel(x,y);
+        x = -sqrt(pow(r,2)-pow((y-y0),2)) + x0;
+        print_pixel(x,y);
+    }
+}
+
+void draw_line(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2){
+    double a = (y2-y1) / (double)(x2-x1);
+    if(a < 1){
+        for (int x = x1; x<x2 +1; x++){
+            int y = a*(x-x1) + y1;
+            print_pixel(x,y);
+        }
+    }
+    else{
+        for (int y = y1; y<y2 +1; y++){
+            int x = 1/a*(y-y1) + x1;
+            print_pixel(x,y);
+        }
+    }
+}
+
+void print_pixel(uint8_t x, uint8_t y){
+    uint8_t row = y/8;
+    uint8_t column = x;
+    oled_pos(row,column);
+    *oled_data |=(1<<(y%8));
 }

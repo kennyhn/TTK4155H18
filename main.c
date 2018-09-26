@@ -5,27 +5,15 @@
 #include "uart.h"
 #include "sram.h"
 #include "adc.h"
-
+#include "menu.h"
+#include "oled.h"
 
 int main(){
-    /*DDRA =  0xFF; //Konfig port
-
-    while(1){
-        PORTA = 1;
-        _delay_ms(2);
-        PORTA = 0;
-        _delay_ms(2);
-
-    }*/
-
-    //USART_test();
     USART_Init(MYUBRR);
-    /*while(1){
-        run_joystick();
-    }*/
-    oled_driver();
-
-    //SRAM_test();
-    //GAL_test();
+    MCUCR = MCUCR|(1<<SRE); //activate XMEM
+    oled_init();
+    menu_driver();
+    //draw_circle(50,25,20);
+    //draw_line(30,30,10,30);
     return 0;
 }
