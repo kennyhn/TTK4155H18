@@ -57,27 +57,49 @@ void oled_init(){
 }
 
 
-void oled_write_character_font8(char letter){
+/*void oled_write_character_font8(char letter){
     char letterline = letter - ' ';
     for(int i = 0; i<8; i++){
         *oled_data=pgm_read_byte(&font8[letterline][i]);
     }
+}*/
+
+void SRAM_oled_write_character_font8(uint8_t line, uint8_t column, char letter){
+    char letterline = letter - ' ';
+    for(int i = 0; i<8; i++){
+        SRAM_write_to_mem(line,column+i,pgm_read_byte(&font8[letterline][i]));
+    }
 }
 
-void oled_write_character_font5(char letter){
+/*void oled_write_character_font5(char letter){
     char letterline = letter - ' ';
     for(int i = 0; i<5; i++){
         *oled_data=pgm_read_byte(&font5[letterline][i]);
     }
+}*/
+
+
+void SRAM_oled_write_character_font5(uint8_t line, uint8_t column, char letter){
+    char letterline = letter - ' ';
+    for(int i = 0; i<5; i++){
+        SRAM_write_to_mem(line,column+i,pgm_read_byte(&font5[letterline][i]));
+    }
 }
 
-void oled_write_character_font4(char letter){
+/*void oled_write_character_font4(char letter){
     char letterline = letter - ' ';
     for(int i = 0; i<4; i++){
         *oled_data=pgm_read_byte(&font4[letterline][i]);
     }
-}
+}*/
 
+
+void SRAM_oled_write_character_font4(uint8_t line, uint8_t column, char letter){
+    char letterline = letter - ' ';
+    for(int i = 0; i<4; i++){
+        SRAM_write_to_mem(line,column+i,pgm_read_byte(&font4[letterline][i]));
+    }
+}
 // Må lage nye write funksjoner for SRAM her som funker til menyen
 
 
@@ -104,27 +126,44 @@ void oled_pos(uint8_t row, uint8_t column) {
     oled_goto_line(row);
 }
 
-void oled_print4(char* word){
+/*void oled_print4(char* word){
     for(int i = 0; word[i]!='\0';i++){
         oled_write_character_font4(word[i]);
     }
+}*/
+
+
+void SRAM_oled_print4(uint8_t line, uint8_t column, char* word){
+    for(int i = 0; word[i]!='\0';i++){
+        SRAM_oled_write_character_font4(line, column+i*4, word[i]);
+    }
 }
 
-void oled_print5(char* word){
+/*void oled_print5(char* word){
     for(int i = 0; word[i]!='\0';i++){
         oled_write_character_font5(word[i]);
     }
-}
-void oled_print8(char* word){
+}*/
+
+
+void SRAM_oled_print5(uint8_t line, uint8_t column, char* word){
     for(int i = 0; word[i]!='\0';i++){
-        oled_write_character_font8(word[i]);
+        SRAM_oled_write_character_font5(line, column+i*5, word[i]);
     }
 }
 
-void draw_circle(uint8_t x0, uint8_t y0, uint8_t r){
-    SRAM_OLED_reset();
-    //oled_reset();
+/*void oled_print8(char* word){
+    for(int i = 0; word[i]!='\0';i++){
+        oled_write_character_font8(word[i]);
+    }
+}*/
 
+void SRAM_oled_print8(uint8_t line, uint8_t column,char* word){
+    for(int i = 0; word[i]!='\0';i++){
+        SRAM_oled_write_character_font8(line, column+i*8, word[i]);
+    }
+}
+void draw_circle(uint8_t x0, uint8_t y0, uint8_t r){
     for(uint8_t x = x0-r; x<= x0 + r; x++){
         uint8_t y = sqrt(pow(r,2)-pow((x-x0),2)) + y0;
         print_pixel(x,y);
@@ -142,7 +181,6 @@ void draw_circle(uint8_t x0, uint8_t y0, uint8_t r){
 }
 
 void draw_line(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2){
-    SRAM_OLED_reset();
     double a = (y2-y1) / (double)(x2-x1);
     if(a < 1){
         for (int x = x1; x<x2 +1; x++){
@@ -157,7 +195,6 @@ void draw_line(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2){
         }
     }
     SRAM_writes_to_screen();
-
 }
 
 void print_pixel(uint8_t x, uint8_t y){
@@ -165,5 +202,5 @@ void print_pixel(uint8_t x, uint8_t y){
     uint8_t column = x;
     //oled_pos(row,column);
     //*oled_data |=(1<<(y%8));
-    SRAM_write(row,column,SRAM_read(row,column)|(1<<(y%8)));
+    SRAM_write_to_mem(row,column,SRAM_read_oled_data(row,column)|(1<<(y%8)));
 }

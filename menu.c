@@ -42,7 +42,8 @@ menu_element* create_menu_element(char* name,uint8_t line, menu_element* up, men
     return e;
 }
 
-void print_page(menu_element* node){
+
+/*void print_page(menu_element* node){
     oled_reset();
     menu_element* temp = node;
     oled_pos(0,0);
@@ -69,9 +70,37 @@ void print_page(menu_element* node){
         oled_pos(--i, 5);
         oled_print5(temp->name);
     }
+}*/
+
+
+//bruker sram
+void print_page(menu_element* node){
+    SRAM_OLED_reset();
+    menu_element* temp = node;
+    if(node->back==NULL){
+        SRAM_oled_print8(0,0,"Main menu");
+    }
+    else{
+        SRAM_oled_print8(0,0,node->back->name);
+    }
+    draw_line(0,127,10,10);
+
+    int i = node->line+2;//i offset
+    SRAM_oled_print5(i,5,node->name);
+    while (node->down != NULL){
+        node = node->down;
+        SRAM_oled_print5(++i,5, node->name);
+    }
+    i = temp->line+2;//i offset
+    while (temp->up != NULL){
+        temp = temp->up;
+        SRAM_oled_print5(--i, 5, temp->name);
+    }
+    SRAM_writes_to_screen();
 }
 
-void print_marker(uint8_t line){
+
+/*void print_marker(uint8_t line){
     volatile char *oled_data = (char*) 0x1200;
     for (int i = 2; i <8;i++){ //changed i to not clear i first lines
         oled_goto_line(i);
@@ -82,6 +111,17 @@ void print_marker(uint8_t line){
     }
     oled_pos(line+2,0);//i offset
     oled_write_character_font5('>');
+}*/
+
+//bruker SRAM
+void print_marker(uint8_t line){
+    for (int i = 2; i <8;i++){ //changed i to not clear i first lines
+        for(int j = 0; j<5;j++){
+            SRAM_write_to_mem(i,j,0x00);
+        }
+    }
+    SRAM_oled_write_character_font5(line+2,0,'>');
+    SRAM_writes_to_screen();
 }
 
 menu_element* create_menu(){ //returnerer første element i menyen

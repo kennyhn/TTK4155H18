@@ -7,13 +7,22 @@
 #include "adc.h"
 #include "menu.h"
 #include "oled.h"
+#include "spi.h"
+#include "mcp2515.h"
+
 
 int main(){
     USART_Init(MYUBRR);
     MCUCR = MCUCR|(1<<SRE); //activate XMEM
     oled_init();
     //menu_driver();
-    draw_circle(50,25,20);
-    //draw_line(30,30,10,30);
+    //SPI_master_init();
+    //while(1){
+      //SPI_master_transmit('a');
+    //}
+    mcp2515_init();
+    /*SRAM_OLED_reset();
+    SRAM_oled_print8(0,0,"Main menu");
+    SRAM_writes_to_screen();*/
     return 0;
 }
