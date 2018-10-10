@@ -3,8 +3,13 @@
 void SPI_master_init(void){
   /* Set MOSI and SCK output and slave select to output, all others input */
   DDRB = (1<<DDB5)|(1<<DDB7) | (1<<DDB4);
+  //Set MISO as input pin
+  DDRB &= ~(1<<DDB6);
   /* Enable SPI, Master, set clock rate fck/16 */
-  SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);
+  SPCR = (1<<MSTR)|(1<<SPR0);
+  SPCR |= (1<<SPE);
+
+  PORTB |= (1<<4); //SS high
 }
 
 //Spi_write
