@@ -3,23 +3,18 @@
 #include <avr/io.h>
 
 uint8_t mcp2515_init(){
-  uint8_t value;
   SPI_master_init(); // Initialize SPI
+
   mcp2515_reset(); // Send reset-command
   // Self-test
-  value = mcp2515_read(MCP_CANSTAT);
-  printf("%x",value);
+  uint8_t value=mcp2515_read(MCP_CANSTAT);
+  printf("0x%x\r\n",value);
   if ((value & MODE_MASK) != MODE_CONFIG) {
-    printf("MCP2515 is NOT in configuration mode after reset!\n");
+    printf("%s","MCP2515 is NOT in configuration mode after reset!\n");
     return 1;
   }
 
-  if ((value & mcp2515_read(MODE_MASK)) != mcp2515_read(MODE_CONFIG)) {
-    printf("MCP2515 is NOT in configuration mode after loopback!\n");
-    return 1;
-  }
-
-  // More initialization
+  printf("%s","MCP2515 IS in configuration mode after reset!\n");
   return 0;
 }
 
@@ -31,7 +26,7 @@ void mcp2515_reset(){
 
 uint8_t mcp2515_read(uint8_t address){
   uint8_t result;
-  PORTB &= ~(1<<4); //CAN_CS // Select CAN-controller
+  PORTB &= ~(1<<4); //MCP_CS // Select CAN-controller
   SPI_master_transmit(MCP_READ); // Send read instruction
   SPI_master_transmit(address); // Send address
   result = SPI_receive(); // Read result

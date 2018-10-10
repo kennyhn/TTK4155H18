@@ -6,8 +6,8 @@ void SPI_master_init(void){
   //Set MISO as input pin
   DDRB &= ~(1<<DDB6);
   /* Enable SPI, Master, set clock rate fck/16 */
-  SPCR = (1<<MSTR)|(1<<SPR0);
-  SPCR |= (1<<SPE);
+  SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);
+  //SPCR |= ;
 
   PORTB |= (1<<4); //SS high
 }
