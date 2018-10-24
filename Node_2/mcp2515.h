@@ -4,7 +4,7 @@
 /*
 mcp2515.h
 
-This file contains constants that are specific to the MCP2515.
+This file contains constants that are specific to the mcp2515.
 
 Version     Date        Description
 ----------------------------------------------------------------------
@@ -13,7 +13,7 @@ v1.00       2003/12/11  Initial release
 Copyright 2003 Kimberly Otten Software Consulting
 */
 
-// Define MCP2515 register addresses
+// Define mcp2515 register addresses
 
 #define MCP_RXF0SIDH	0x00
 #define MCP_RXF0SIDL	0x01

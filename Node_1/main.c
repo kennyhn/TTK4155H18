@@ -11,10 +11,14 @@
 #include "mcp2515.h"
 #include "can.h"
 
-
+extern volatile int can_message_received;
 int main(){
     USART_Init(MYUBRR);
     MCUCR = MCUCR|(1<<SRE); //activate XMEM
+    interrupt_int0_init(); //activate interrupt vector 0
+    can_message_received = 0;
+    printf("%d",can_message_received);
+    printf("Hei sjef\n");
     //SRAM_test();
     //oled_init();
     //menu_driver();
@@ -35,15 +39,19 @@ int main(){
     SRAM_writes_to_screen();*/
 
     //mcp2515_init();
-    can_init();
+    can_normal_init();
     can_message message;
-    can_message rmsg;
+    //can_message rmsg;
     message.id = 1;
     message.length = 1;
     message.data[0] = (uint8_t)'U';
     can_message_send(&message);
-    rmsg=can_data_receive();
-    printf("Message id %d\nMessage length %d \nMessage data %c\n",rmsg.id,rmsg.length,rmsg.data[0]);
-    
+    /*while(1){
+      if(can_message_received){
+          can_message_received = 0;
+          rmsg=can_data_receive();
+          printf("Message id %d\nMessage length %d \nMessage data %c\n",rmsg.id,rmsg.length,rmsg.data[0]);
+      }
+    }*/
     return 0;
 }

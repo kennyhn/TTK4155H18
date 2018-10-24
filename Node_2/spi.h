@@ -9,5 +9,4 @@
 void SPI_master_init(void);
 void SPI_master_transmit(char cData);
 char SPI_master_receive(void);
-
 #endif

@@ -1,7 +1,5 @@
 #ifndef CAN_H_
 #define CAN_H_
-#include "mcp2515.h"
-#include "spi.h"
 #include <avr/io.h>
 #include <stdint.h>
 #include <avr/interrupt.h>
@@ -22,10 +20,10 @@ can_message can_data_receive(void);
 void can_error();
 uint8_t can_int_vect();
 int can_transmit_complete();
-void interrupt_int0_init();
+void interrupt_pcint6_init();
 
-ISR(INT0_vect){
-  //can_message_received = 1;
+ISR(PCINT0_vect){
+  can_message_received = 1;
 }
 
 #endif
