@@ -1,6 +1,7 @@
 #include "menu.h"
 #include "adc.h"
 #include "oled.h"
+#include "sram.h"
 #include <avr/io.h>
 
 

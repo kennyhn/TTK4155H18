@@ -1,7 +1,6 @@
 #include "mcp2515.h"
 #include "spi.h"
 #include <avr/io.h>
-#include <util/delay.h>
 
 uint8_t mcp2515_init(){
   SPI_master_init(); // Initialize SPI
@@ -9,7 +8,6 @@ uint8_t mcp2515_init(){
   // Self-test
 
   while((mcp2515_read(MCP_CANSTAT) & MODE_MASK) != MODE_CONFIG);
-  //_delay_ms(2);
   printf("%s","mcp2515 IS in configuration mode after reset!\n");
   return 0;
 }

@@ -3,25 +3,23 @@
 #include <avr/io.h>
 #include "adc.h"
 
-
-
-void joystick_y_axis(uint8_t *adc){
+void joystick_y_axis(volatile uint8_t *adc){
     _delay_ms(1);
     *adc = 0x04;
     _delay_ms(60);
-     //printf("%d\n",*adc);
+     printf("%d\n",*adc);
 }
 
-void joystick_x_axis(uint8_t *adc){
+void joystick_x_axis(volatile uint8_t *adc){
     _delay_ms(1);
     *adc = 0x05;
     _delay_ms(60);
-     //printf("%d\n",*adc);
+     printf("%d\n",*adc);
 }
 
 // L-slider midten nede
 //l-button er midten oppe
-void l_slider(uint8_t *adc){
+void l_slider(volatile uint8_t *adc){
     _delay_ms(1);
     *adc = 0x06;
     _delay_ms(60);
@@ -30,7 +28,7 @@ void l_slider(uint8_t *adc){
 
 // R-slider oppe til ventre
 //r-button er under r-slider
-void r_slider(uint8_t *adc){
+void r_slider(volatile uint8_t *adc){
     _delay_ms(1);
     *adc = 0x07;
     _delay_ms(60);
@@ -64,7 +62,7 @@ void run_joystick(){
 
 }
 
-joystick_perc_angle get_perc_angle(uint8_t *adc){
+joystick_perc_angle get_perc_angle(volatile uint8_t *adc){
     joystick_perc_angle jpa;
     double neutral = 255/2;
 
@@ -78,7 +76,7 @@ joystick_perc_angle get_perc_angle(uint8_t *adc){
 
 
 
-joystick_direction check_joystick_direction(uint8_t *adc){
+joystick_direction check_joystick_direction(volatile uint8_t *adc){
     joystick_perc_angle jpa = get_perc_angle(adc);
     if(abs(jpa.X_value) < 10 && abs(jpa.Y_value) < 10 ){
         return NEUTRAL;

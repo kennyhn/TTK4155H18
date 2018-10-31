@@ -3,6 +3,7 @@
 #include <avr/io.h>
 #include <math.h>
 
+#include "sram.h"
 #include "oled.h"
 #include "fonts.h"
 
@@ -29,6 +30,7 @@ void oled_reset(void){
 }
 
 void oled_init(){
+    MCUCR = MCUCR|(1<<SRE); //activate XMEM
 
     write_c(0xae);        //  display  off
     write_c(0xa1);        //segment  remap
@@ -54,6 +56,8 @@ void oled_init(){
     write_c(0xaf);        //  display  on
 
     oled_reset();
+    SRAM_OLED_reset();
+
 }
 
 

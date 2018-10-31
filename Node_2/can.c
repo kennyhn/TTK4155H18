@@ -3,7 +3,6 @@
 #include "can.h"
 #include "mcp2515.h"
 #include "spi.h"
-#include <util/delay.h>
 
 int can_loopback_init(){
   mcp2515_init(); //setup mcp
@@ -83,6 +82,13 @@ can_message can_data_receive(void){
   return message;
 }
 
+void receive_joystick_message(joystick_perc_angle* jpa, joystick_direction* jd){
+  can_message rmsg;
+  rmsg=can_data_receive();
+  jpa->X_value=(int8_t)rmsg.data[0];
+  jpa->Y_value=(int8_t)rmsg.data[1];
+  *jd=(int8_t)rmsg.data[2];
+}
 
 //Check if there is an interrupt in CAN-controller
 uint8_t can_int_vect(){
@@ -106,4 +112,8 @@ void interrupt_pcint6_init(void){
 
   //Enable global interrupts
   sei();
+}
+
+ISR(PCINT0_vect){
+  can_message_received = 1;
 }

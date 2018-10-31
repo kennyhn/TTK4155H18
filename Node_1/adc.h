@@ -11,18 +11,18 @@ typedef struct Joystick_perc_angle{
     int8_t Y_value;
 }joystick_perc_angle;
 
-void joystick_y_axis(uint8_t *adc);
+void joystick_y_axis(volatile uint8_t *adc);
 
-void joystick_x_axis(uint8_t *adc);
+void joystick_x_axis(volatile uint8_t *adc);
 
-void r_slider(uint8_t *adc);
+void r_slider(volatile uint8_t *adc);
 
-void l_slider(uint8_t *adc);
+void l_slider(volatile uint8_t *adc);
 
 void run_joystick();
 
-joystick_perc_angle get_perc_angle(uint8_t *adc);
+joystick_perc_angle get_perc_angle(volatile uint8_t *adc);
 
-joystick_direction check_joystick_direction(uint8_t *adc);
+joystick_direction check_joystick_direction(volatile uint8_t *adc);
 
 #endif

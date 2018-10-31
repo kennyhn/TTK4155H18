@@ -9,8 +9,8 @@
 
 
 void USART_Init(unsigned int ubrr);
-void USART_Transmit(unsigned char data);
-unsigned char USART_Receive(void);
+int USART_Transmit(char data, FILE* _notused);
+int USART_Receive(FILE* _notused);
 void USART_test();
 
 

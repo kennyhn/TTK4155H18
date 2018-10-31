@@ -1,4 +1,4 @@
-#define F_CPU 4915200
+#define F_CPU 16000000
 #include <util/delay.h>
 #include <avr/io.h>
 #include <stdio.h>
@@ -6,19 +6,17 @@
 #include "mcp2515.h"
 #include "can.h"
 
-extern volatile int can_message_received;
 int main(){
   //can_message_received = 0;
   USART_Init(MYUBRR);
   interrupt_pcint6_init();
   can_message_received = 0;
   printf("%d",can_message_received);
-  printf("Hei\n");
+  //printf("Hei\n");
   //SPI_master_init();
   //while(1){
     //SPI_master_transmit('a');
   //}
-
 
   /*SPI_master_init(); // Initialize SPI
   while(1){
@@ -41,12 +39,16 @@ int main(){
     printf("Message id %d\nMessage length %d \nMessage data %c\n",rmsg.id,rmsg.length,rmsg.data[0]);
   }*/
 
+  joystick_direction jd;
+  joystick_perc_angle jpa;
+
   while(1){
     if(can_message_received){
         can_message_received = 0;
-        rmsg=can_data_receive();
-        printf("Message id %d\nMessage length %d \nMessage data %c\n",rmsg.id,rmsg.length,rmsg.data[0]);
+        receive_joystick_message(&jpa,&jd);
+        //printf("Message id %d\nMessage length %d \nMessage data %c\n", rmsg.id,rmsg.length,rmsg.data[0]);
     }
+    printf("Joystick percent angle X %d\nJoystick percent angle Y%d\nJoystick direction%d", jpa.X_value, jpa.Y_value, jd);
   }
   return 0;
 }

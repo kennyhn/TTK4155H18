@@ -15,4 +15,6 @@ typedef struct Menu_element{
 
 void menu_driver(void);
 menu_element* create_menu();
+void print_page(menu_element* node);
+void print_marker(uint8_t line);
 #endif

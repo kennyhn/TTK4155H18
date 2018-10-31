@@ -1,5 +1,6 @@
 #include "can.h"
 #include "mcp2515.h"
+#include "adc.h"
 
 int can_loopback_init(){
   if (mcp2515_init()){ //Setup mcp while checking if it is set up right
@@ -89,6 +90,22 @@ can_message can_data_receive(void){
   return message;
 }
 
+void send_joystick_message(){
+  //send joystick joystick direction
+  MCUCR = MCUCR|(1<<SRE); //activate XMEM
+  volatile uint8_t* adc = (uint8_t*)0x1400;
+  joystick_direction jd = check_joystick_direction(adc);
+  joystick_perc_angle jpa = get_perc_angle(adc);
+
+  can_message msg;
+  msg.id = 10;
+  msg.length = 3; //4 når vi får med knappen
+  msg.data[0]=(uint8_t)jpa.X_value;
+  msg.data[1]=(uint8_t)jpa.Y_value;
+  msg.data[2]=(uint8_t)jd;
+  printf("her er x-value %d \n", (int8_t)msg.data[0]);
+  can_message_send(&msg);
+}
 
 //Check if there is an interrupt in CAN-controller
 uint8_t can_int_vect(){
@@ -97,8 +114,8 @@ uint8_t can_int_vect(){
 /*
 int can_transmit_complete(uint8_t buffer){
   return ;//return 1 when the transmit is complete
-}
-*/
+}*/
+
 void interrupt_int0_init(void){
   //  Set pin to input
   DDRD &= ~(1<<PD2);
@@ -115,4 +132,8 @@ void interrupt_int0_init(void){
   //Enable global interrupts
   sei();
 
+}
+
+ISR(INT0_vect){
+  can_message_received = 1;
 }

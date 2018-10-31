@@ -16,17 +16,19 @@ void USART_Init(unsigned int ubrr){
     fdevopen(USART_Transmit,USART_Receive); //For it to work with putty
 }
 
-void USART_Transmit(unsigned char data){
+int USART_Transmit(char data, FILE* _notused){
+    (void) _notused;
     while (!(UCSR0A & (1<<UDRE0)));
     UDR0 = data;
 
     if (data == '\n'){
-        USART_Transmit('\r');
+        USART_Transmit('\r', NULL);
     }
-
+    return 0;
 }
 
-unsigned char USART_Receive(void){
+int USART_Receive(FILE* _notused){
+    (void) _notused;
     while (!(UCSR0A & (1<<RXC0)));
     return UDR0;
 }
@@ -36,10 +38,10 @@ unsigned char USART_Receive(void){
 void USART_test(){
     USART_Init(MYUBRR);
     //_delay_ms(10000);
-    USART_Transmit('A');
+    USART_Transmit('A',NULL);
     printf("hei\r\n");
     while(1){
-        USART_Transmit(USART_Receive());
+        USART_Transmit(USART_Receive(NULL),NULL);
         //unsigned char k = USART_Receive();
         _delay_ms(2);
     }

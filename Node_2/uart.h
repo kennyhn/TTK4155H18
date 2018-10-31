@@ -1,16 +1,17 @@
 #ifndef UART_H_
 #define UART_H_
-#include <stdio.h>
-
 #define F_CPU 16000000
 #define FOSC 16000000
 #define BAUD 9600
 #define MYUBRR FOSC/16/BAUD-1
+#include <stdio.h>
+
+
 
 
 void USART_Init(unsigned int ubrr);
-void USART_Transmit(unsigned char data);
-unsigned char USART_Receive(void);
+int USART_Transmit(char data, FILE* _notused);
+int USART_Receive(FILE* _notused);
 void USART_test();
 
 
