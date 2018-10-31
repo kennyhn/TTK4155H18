@@ -11,6 +11,11 @@ typedef struct Joystick_perc_angle{
     int8_t Y_value;
 }joystick_perc_angle;
 
+typedef struct Joystick_raw_data{
+    uint8_t X_value;
+    uint8_t Y_value;
+}joystick_raw_data;
+
 void joystick_y_axis(volatile uint8_t *adc);
 
 void joystick_x_axis(volatile uint8_t *adc);

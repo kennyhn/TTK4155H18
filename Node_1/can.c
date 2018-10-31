@@ -38,7 +38,6 @@ int can_normal_init(){
   printf("The CAN is in normal mode\n");
 
   //Enable interrupts must be cleared by MCU to reset interrupt condition
-  mcp2515_write(MCP_CANINTE, MCP_TX_INT); //Enable transmit interrupts
   mcp2515_write(MCP_CANINTE, MCP_RX_INT); //enable recieve interrupts
 
   mcp2515_write(MCP_TXB0CTRL,0); //Make channel 0-2 ready to transmit message, setting all the transmit message flags to 0
@@ -95,15 +94,22 @@ void send_joystick_message(){
   MCUCR = MCUCR|(1<<SRE); //activate XMEM
   volatile uint8_t* adc = (uint8_t*)0x1400;
   joystick_direction jd = check_joystick_direction(adc);
-  joystick_perc_angle jpa = get_perc_angle(adc);
+  //joystick_perc_angle jpa = get_perc_angle(adc);
+  /*using raw data for greater resolution*/
+  joystick_raw_data jrd;
+  joystick_x_axis(adc);
+  jrd.X_value = *adc;
+  joystick_y_axis(adc);
+  jrd.Y_value = *adc;
+
 
   can_message msg;
   msg.id = 10;
   msg.length = 3; //4 når vi får med knappen
-  msg.data[0]=(uint8_t)jpa.X_value;
-  msg.data[1]=(uint8_t)jpa.Y_value;
+  msg.data[0]=jrd.X_value;
+  msg.data[1]=jrd.Y_value;
   msg.data[2]=(uint8_t)jd;
-  printf("her er x-value %d \n", (int8_t)msg.data[0]);
+  //printf("her er x-value %d \n", (int8_t)msg.data[0]);
   can_message_send(&msg);
 }
 

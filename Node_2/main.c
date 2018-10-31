@@ -5,13 +5,16 @@
 #include "uart.h"
 #include "mcp2515.h"
 #include "can.h"
+#include "timer.h"
+#include "adc.h"
+
 
 int main(){
   //can_message_received = 0;
   USART_Init(MYUBRR);
   interrupt_pcint6_init();
   can_message_received = 0;
-  printf("%d",can_message_received);
+  //printf("%d",can_message_received);
   //printf("Hei\n");
   //SPI_master_init();
   //while(1){
@@ -25,6 +28,14 @@ int main(){
       _delay_ms(100);
   }
   */
+  adc_init();
+  printf("På nytt");
+  while(1){
+    _delay_ms(1000);
+    uint16_t data = adc_read();
+    printf("Data = %x \n", data);
+  }
+
   mcp2515_init();
   can_normal_init();
   //can_message message;
@@ -40,15 +51,17 @@ int main(){
   }*/
 
   joystick_direction jd;
-  joystick_perc_angle jpa;
+  joystick_raw_data jrd;
 
+/*
   while(1){
     if(can_message_received){
         can_message_received = 0;
-        receive_joystick_message(&jpa,&jd);
+        pwm_driver();
+        //receive_joystick_message(&jpa,&jd);
         //printf("Message id %d\nMessage length %d \nMessage data %c\n", rmsg.id,rmsg.length,rmsg.data[0]);
     }
-    printf("Joystick percent angle X %d\nJoystick percent angle Y%d\nJoystick direction%d", jpa.X_value, jpa.Y_value, jd);
-  }
+    //printf("Joystick percent angle X %d\nJoystick percent angle Y%d\nJoystick direction%d", jpa.X_value, jpa.Y_value, jd);
+  }*/
   return 0;
 }

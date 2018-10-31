@@ -6,15 +6,15 @@
 void joystick_y_axis(volatile uint8_t *adc){
     _delay_ms(1);
     *adc = 0x04;
-    _delay_ms(60);
-     printf("%d\n",*adc);
+    _delay_ms(48);
+     //printf("%d\n",*adc);
 }
 
 void joystick_x_axis(volatile uint8_t *adc){
     _delay_ms(1);
     *adc = 0x05;
-    _delay_ms(60);
-     printf("%d\n",*adc);
+    _delay_ms(48);
+     //printf("%d\n",*adc);
 }
 
 // L-slider midten nede
@@ -65,8 +65,6 @@ void run_joystick(){
 joystick_perc_angle get_perc_angle(volatile uint8_t *adc){
     joystick_perc_angle jpa;
     double neutral = 255/2;
-
-
     joystick_x_axis(adc);
     jpa.X_value = ((double)*adc - neutral)/(255 - neutral)*100;
     joystick_y_axis(adc);

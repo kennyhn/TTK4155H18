@@ -18,7 +18,7 @@ int can_loopback_init();
 int can_normal_init();
 void can_message_send(can_message* msg);
 can_message can_data_receive(void);
-void receive_joystick_message(joystick_perc_angle* jpa, joystick_direction* jd);
+void receive_joystick_message(joystick_raw_data* jrd, joystick_direction* jd);
 //void can_error();
 uint8_t can_int_vect();
 //int can_transmit_complete();

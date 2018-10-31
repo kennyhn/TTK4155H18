@@ -11,7 +11,6 @@ int can_loopback_init(){
   printf("The CAN is in loopback mode\n");
 
   //Enable interrupts must be cleared by MCU to reset interrupt condition
-  mcp2515_write(MCP_CANINTE, MCP_TX_INT); //Enable transmit interrupts
   mcp2515_write(MCP_CANINTE, MCP_RX_INT); //enable recieve interrupts
 
   mcp2515_write(MCP_TXB0CTRL,0); //Make channel 0-2 ready to transmit message, setting all the transmit message flags to 0
@@ -31,7 +30,6 @@ int can_normal_init(){
   printf("The CAN is in normal mode\n");
 
   //Enable interrupts must be cleared by MCU to reset interrupt condition
-  mcp2515_write(MCP_CANINTE, MCP_TX_INT); //Enable transmit interrupts
   mcp2515_write(MCP_CANINTE, MCP_RX_INT); //enable recieve interrupts
 
   mcp2515_write(MCP_TXB0CTRL,0); //Make channel 0-2 ready to transmit message, setting all the transmit message flags to 0
@@ -75,18 +73,18 @@ can_message can_data_receive(void){
       message.data[i] = mcp2515_read(MCP_RXB0D0+i);
     }
     mcp2515_write(MCP_CANINTF, mcp2515_read_status() & 0xFE); //clear interrupt flag
-    printf("%c\n",message.data[0]);
+    //printf("%c\n",message.data[0]);
     return message;
   }
   message.id = 0;
   return message;
 }
 
-void receive_joystick_message(joystick_perc_angle* jpa, joystick_direction* jd){
+void receive_joystick_message(joystick_raw_data* jrd, joystick_direction* jd){
   can_message rmsg;
   rmsg=can_data_receive();
-  jpa->X_value=(int8_t)rmsg.data[0];
-  jpa->Y_value=(int8_t)rmsg.data[1];
+  jrd->X_value=rmsg.data[0];
+  jrd->Y_value=rmsg.data[1];
   *jd=(int8_t)rmsg.data[2];
 }
 
