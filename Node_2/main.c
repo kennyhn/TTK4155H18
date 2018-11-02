@@ -5,8 +5,9 @@
 #include "uart.h"
 #include "mcp2515.h"
 #include "can.h"
-#include "timer.h"
-#include "adc.h"
+#include "pwm.h"
+#include "adc_arduino.h"
+#include "TWI_Master.h"
 
 
 int main(){
@@ -28,16 +29,16 @@ int main(){
       _delay_ms(100);
   }
   */
+  cli();
   adc_init();
-  printf("På nytt");
-  while(1){
-    _delay_ms(1000);
-    uint16_t data = adc_read();
-    printf("Data = %x \n", data);
-  }
-
   mcp2515_init();
   can_normal_init();
+  pwm_init();
+  TWI_Master_Initialise();
+  sei();
+  printf("På nytt");
+
+
   //can_message message;
   can_message rmsg;
   /*message.id = 1;
@@ -53,7 +54,7 @@ int main(){
   joystick_direction jd;
   joystick_raw_data jrd;
 
-/*
+
   while(1){
     if(can_message_received){
         can_message_received = 0;
@@ -61,7 +62,9 @@ int main(){
         //receive_joystick_message(&jpa,&jd);
         //printf("Message id %d\nMessage length %d \nMessage data %c\n", rmsg.id,rmsg.length,rmsg.data[0]);
     }
-    //printf("Joystick percent angle X %d\nJoystick percent angle Y%d\nJoystick direction%d", jpa.X_value, jpa.Y_value, jd);
-  }*/
+    uint16_t data = adc_read();
+    printf("Data = %d \n", data);
+
+  }
   return 0;
 }

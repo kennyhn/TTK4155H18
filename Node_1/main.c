@@ -13,12 +13,17 @@
 
 
 int main(){
+    cli();
     USART_Init(MYUBRR);
     MCUCR = MCUCR|(1<<SRE); //activate XMEM
+    can_normal_init();
+    sei();
     printf("1 fors: %x\n",MCUCR);
     interrupt_int0_init();
     printf("2 fors: %x\n",MCUCR); //activate interrupt vector 0
     can_message_received = 0;
+
+
     //printf("%d",can_message_received);
     //printf("Hei sjef\n");
     //SRAM_test();
@@ -40,7 +45,7 @@ int main(){
     SRAM_writes_to_screen();*/
 
     //mcp2515_init();
-    can_normal_init();
+
     //can_message message;
     //can_message rmsg;
     //message.id = 1;
