@@ -2,6 +2,7 @@
 #include <avr/io.h>
 #include "../Node_1/adc.h"
 #include "can.h"
+#include "motor.h"
 #define F_CPU 16000000
 #define PRESCALER 8
 
@@ -29,19 +30,48 @@ void pwm_init(void){
 
 }
 
-void pwm_driver(void){
-  joystick_direction jd;
-  joystick_raw_data jrd;
-  //Let CAN be driven outside this function
-  receive_joystick_message(&jrd,&jd);
-  double placement = (double)jrd.X_value/255.0+1;
+void timer_interrupt_init(){
+  cli(); // Disable global interrupts
+  TIMSK1 |= (1<<TOIE1); //Enabling OVERFLOW INTERRUPT
+  sei(); //Enable global interrupts
+}
 
+ISR(TIMER1_OVF_vect){
+  int16_t reference=position_reference; // kan settes til 128 for testing
+  int16_t position=transform_encoder_to_position(read_encoder());
+  int16_t e = reference - position;
+  total_e += e;
+
+  if (abs(total_e)>500){
+    total_e = e;
+  }
+  //printf("%d",total_e);
+  uint16_t u = 1*e+0.020*1*total_e;
+  motor_driver(u);
+}
+
+void pwm_driver(double x_value_raw){
+  double placement = x_value_raw/255.0+1;
   if (placement>=1 && placement<=2){
     int number = placement*0.001*F_CPU/PRESCALER;
     //printf("number should be between 2000 and 4000: %d\n",number);
-    OCR1A=number; //kun for testing foreløpig
+    OCR1A=number;
   }
   else{
     OCR1A=3000;
   }
+}
+
+void solenoid_control(uint8_t jrd_button_pressed){
+  //TBD: Finne ut hvordan vi kan styre spenningen/verdien ut av en port
+
+  DDRC |= (1<<PC3);//Setter port C pinne 3 til write
+  PORTC &= ~(1<<PC3);
+
+  /*if(!jrd_button_pressed){
+    PORTC |= (1<<PC3);
+  }
+  else{
+    PORTC &= ~(1<<PC3);
+  }*/
 }

@@ -89,7 +89,7 @@ can_message can_data_receive(void){
   return message;
 }
 
-void send_joystick_message(){
+void send_console_message(){
   //send joystick joystick direction
   MCUCR = MCUCR|(1<<SRE); //activate XMEM
   volatile uint8_t* adc = (uint8_t*)0x1400;
@@ -97,18 +97,27 @@ void send_joystick_message(){
   //joystick_perc_angle jpa = get_perc_angle(adc);
   /*using raw data for greater resolution*/
   joystick_raw_data jrd;
+  slider_raw_data srd;
   joystick_x_axis(adc);
   jrd.X_value = *adc;
   joystick_y_axis(adc);
   jrd.Y_value = *adc;
+  l_slider(adc);
+  srd.left_slider_value = *adc;
+  r_slider(adc);
+  srd.right_slider_value = *adc;
 
+  jrd.button_pressed = (PINB & (1<<PB2));
 
   can_message msg;
   msg.id = 10;
-  msg.length = 3; //4 når vi får med knappen
+  msg.length = 6; //6 når vi får med knappen
   msg.data[0]=jrd.X_value;
   msg.data[1]=jrd.Y_value;
-  msg.data[2]=(uint8_t)jd;
+  msg.data[2]=jrd.button_pressed;
+  msg.data[3]=(uint8_t)jd;
+  msg.data[4]=srd.left_slider_value;
+  msg.data[5]=srd.right_slider_value;
   //printf("her er x-value %d \n", (int8_t)msg.data[0]);
   can_message_send(&msg);
 }

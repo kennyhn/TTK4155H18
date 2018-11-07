@@ -19,7 +19,7 @@ int can_loopback_init();
 int can_normal_init();
 void can_message_send(can_message* msg);
 can_message can_data_receive(void);
-void send_joystick_message();
+void send_console_message();
 //void can_error();
 uint8_t can_int_vect();
 //int can_transmit_complete();

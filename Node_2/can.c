@@ -80,12 +80,16 @@ can_message can_data_receive(void){
   return message;
 }
 
-void receive_joystick_message(joystick_raw_data* jrd, joystick_direction* jd){
+
+void receive_console_message(joystick_raw_data* jrd, joystick_direction* jd, slider_raw_data* srd ){
   can_message rmsg;
   rmsg=can_data_receive();
   jrd->X_value=rmsg.data[0];
   jrd->Y_value=rmsg.data[1];
-  *jd=(int8_t)rmsg.data[2];
+  jrd->button_pressed=rmsg.data[2];
+  *jd=(int8_t)rmsg.data[3];
+  srd->left_slider_value=rmsg.data[4];
+  srd->right_slider_value=rmsg.data[5];
 }
 
 //Check if there is an interrupt in CAN-controller
@@ -104,7 +108,7 @@ void interrupt_pcint6_init(void){
   // Disable global interrupts
   cli();
 
-  //Enable interrupt on PB6
+  //Enable interrupt on PB6, both lines needed since this is an external interrupt
   PCMSK0 |= (1<<PCINT6);
   PCICR |= (1<<PCIE0);
 

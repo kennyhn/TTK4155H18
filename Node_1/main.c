@@ -53,7 +53,7 @@ int main(){
     //message.data[0] = (uint8_t)'U';
     //can_message_send(&message);
     while(1){
-      send_joystick_message();
+      send_console_message();
       /*if(can_message_received){
           can_message_received = 0;
           rmsg=can_data_receive();

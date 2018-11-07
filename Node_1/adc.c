@@ -6,14 +6,14 @@
 void joystick_y_axis(volatile uint8_t *adc){
     _delay_ms(1);
     *adc = 0x04;
-    _delay_ms(48);
+    _delay_ms(60);
      //printf("%d\n",*adc);
 }
 
 void joystick_x_axis(volatile uint8_t *adc){
     _delay_ms(1);
     *adc = 0x05;
-    _delay_ms(48);
+    _delay_ms(60);
      //printf("%d\n",*adc);
 }
 
@@ -23,7 +23,6 @@ void l_slider(volatile uint8_t *adc){
     _delay_ms(1);
     *adc = 0x06;
     _delay_ms(60);
-     printf("%d\n",*adc);
 }
 
 // R-slider oppe til ventre
@@ -32,8 +31,8 @@ void r_slider(volatile uint8_t *adc){
     _delay_ms(1);
     *adc = 0x07;
     _delay_ms(60);
-     printf("%d\n",*adc);
 }
+
 
 void run_joystick(){
     MCUCR = MCUCR|(1<<SRE); //activate XMEM
