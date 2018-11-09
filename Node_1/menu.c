@@ -3,6 +3,7 @@
 #include "sram.h"
 #include "game.h"
 #include <avr/io.h>
+volatile int32_t high_score = 0;
 
 void menu_driver(joystick_direction dir, menu_element** menu_choice,volatile uint8_t* adc){
     dir = check_joystick_direction(adc);
@@ -15,10 +16,13 @@ void menu_driver(joystick_direction dir, menu_element** menu_choice,volatile uin
     else if(dir == RIGHT && (*menu_choice)->choose!=NULL){
         *menu_choice=(*menu_choice)->choose;
         if ((*menu_choice)->name == "Game"){
-          play_game();
+          high_score = play_game();
           *menu_choice=(*menu_choice)->back;
+          print_score();
         }
-        print_page(*menu_choice);
+        else{
+            print_page(*menu_choice);
+        }
 
     }
     else if(dir==LEFT && (*menu_choice)->back!=NULL){
@@ -64,7 +68,18 @@ void print_page(menu_element* node){
         temp = temp->up;
         SRAM_oled_print5(--i, 5, temp->name);
     }
-    SRAM_writes_to_screen();
+
+}
+
+void print_score(void){
+  SRAM_OLED_reset();
+  SRAM_oled_print8(0,0,"Score");
+  if (high_score > 100){
+    SRAM_oled_print8(3,3, "Bra");
+  }
+  else{
+      SRAM_oled_print8(3,3, "Hopeless");
+  }
 }
 
 //bruker SRAM
@@ -81,13 +96,15 @@ void print_marker(uint8_t line){
 menu_element* create_menu(){ //returnerer første element i menyen
     menu_element* play_game = create_menu_element("Play game",0, NULL, NULL, NULL,NULL);
     menu_element* game = create_menu_element("Game",0, NULL, NULL, NULL,NULL);
+    menu_element* score = create_menu_element("Score", 0, NULL, NULL, play_game, NULL);
     menu_element* highscore = create_menu_element("Highscore", 1,play_game, NULL, NULL, play_game);
     menu_element* test1 = create_menu_element("Test1", 0,NULL, NULL, NULL, highscore);
     menu_element* test2 = create_menu_element("Test2", 1,test1, NULL, NULL, highscore);
     menu_element* test3 = create_menu_element("Test3", 2,test2, NULL, NULL, highscore);
 
     menu_element* test4 = create_menu_element("Test4", 0,NULL, NULL, NULL, test2);
-
+    game->back=score;
+    score->back=highscore;
     play_game->down=highscore;
     play_game->choose=game;
     highscore->choose = test1;

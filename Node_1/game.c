@@ -3,13 +3,13 @@
 #include "oled.h"
 #include "uart.h"
 #include "sram.h"
+#define F_CPU 4915200
+#include <util/delay.h>
 
-void play_game(void){
+int play_game(void){
   uint8_t x0 = 8;
   uint8_t y0 = 8;
   uint8_t r0 = 8;
-
-
 
   uint8_t x1 = 24;
   uint8_t y1 = 24;
@@ -22,12 +22,19 @@ void play_game(void){
   uint8_t x3 = 56;
   uint8_t y3 = 56;
   uint8_t r3 = 6;
+  int high_score;
   while(1){
+
+    //Dette gjøres for å ikke få uforventet brudd pga game-over verdien blir liggende igjen.
     if (can_message_received){
-      can_message_received = 0;
-      break;
+      while(can_message_received){
+          can_message_received = 0;
+          can_message rmsg = can_data_receive();
+          high_score =  rmsg.data[0];
+      }
+      printf("Everything's good\n");
+      return high_score;
     }
-    printf("kommer hit %d\n",x1);
     SRAM_OLED_reset();
     draw_circle(x0,y0,r0);
     draw_line(x0-2,x0+2, y0+2, y0+2);
@@ -56,5 +63,5 @@ void play_game(void){
       x3 = 8;
     }
   }
-
+  return 0;
 }

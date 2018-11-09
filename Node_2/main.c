@@ -26,32 +26,21 @@ int main(){
   sei();
   timer_interrupt_init();
 
-
-  //can_message rmsg;
-  /*message.id = 1;
-  message.length = 1;
-  message.data[0] = (uint8_t)'K';
-  can_message_send(&message);
-  while(1){
-    _delay_ms(10);
-    rmsg=can_data_receive();
-    printf("Message id %d\nMessage length %d \nMessage data %c\n",rmsg.id,rmsg.length,rmsg.data[0]);
-  }*/
-
   joystick_direction jd;
   joystick_raw_data jrd;
   slider_raw_data srd;
 
   reset_encoder();
-
+  adc_read(); //To prevent first read to be zero
+  _delay_ms(4); //To prevent first read to be zero
+  high_score=0;
   while(1){
-
     if(can_message_received){
         can_message_received = 0;
         //Let CAN be driven outside this function
         receive_console_message(&jrd,&jd, &srd);
         //TBD
-        //Mottar joystick-meldingen i main. Sender kun inn X_value til pwm_driver og ikke hele meldingen
+        //må fikse tidsforsinkelse for ADC. Heller bruke en interrupt enn delay
         pwm_driver(jrd.X_value);
         position_reference=srd.right_slider_value;
         //printf("Position reference: %d \n", position_reference);
@@ -60,16 +49,22 @@ int main(){
         //motor_driver(jrd.X_value-128);
         //receive_joystick_message(&jpa,&jd);
         //printf("Message id %d\nMessage length %d \nMessage data %c\n", rmsg.id,rmsg.length,rmsg.data[0]);
-    }/*
-    if(check_game_over()){
-      printf("game over \n");
-      can_message smsg;
-      smsg.id = 1;
-      smsg.length = 1;
-      smsg.data[0] = (uint8_t)'K';
-      can_message_send(&smsg);
-    }*/
-    //printf("Data = %d \n", data);
+        int i = 0;
+        if(check_game_over()){
+          printf("high score: %d\n", high_score);
+          can_message smsg;
+          smsg.id = 1;
+          smsg.length = 2;
+          smsg.data[i] = (uint8_t)high_score;
+          can_message_send(&smsg);
+          high_score=0;
+          //TBD
+          //Vi må fikse interrupt for spillet.
+        }
+    }
   }
   return 0;
 }
+
+// Må løse at data<20 fra adc to++ ganger, noe skaper problemer både i node 1 og 2. Løsningen vi har nå funker
+// men er ikke optimal. 

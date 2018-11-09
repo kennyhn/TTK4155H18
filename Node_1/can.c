@@ -82,7 +82,7 @@ can_message can_data_receive(void){
     for(uint8_t i = 0; i < message.length; i++){
       message.data[i] = mcp2515_read(MCP_RXB0D0+i);
     }
-    mcp2515_write(MCP_CANINTF, mcp2515_read_status() & 0xFE); //disable interrupt flag
+    mcp2515_write(MCP_CANINTF, mcp2515_read_status() & 0xFE); //clear interrupt flag
     return message;
   }
   message.id = 0;
@@ -148,4 +148,5 @@ void interrupt_int0_init(void){
 
 ISR(INT0_vect){
   can_message_received = 1;
+  printf("kommer i interrupt \n");
 }

@@ -27,17 +27,11 @@ int main(){
     volatile uint8_t* adc = (uint8_t*) 0x1400;
     joystick_direction dir;
     menu_element* menu_choice = create_menu(); //creating the menu
-
+    printf("#############\n");
     //SRAM_test();
 
     while(1){
       menu_driver(dir, &menu_choice,adc); //Updating the menu
-      
-      /*if(can_message_received){
-          can_message_received = 0;
-          rmsg=can_data_receive();
-          printf("Message id %d\nMessage length %d \nMessage data %c\n",rmsg.id,rmsg.length,rmsg.data[0]);
-      }*/
     }
     return 0;
 }

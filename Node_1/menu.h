@@ -17,5 +17,7 @@ typedef struct Menu_element{
 void menu_driver(joystick_direction dir, menu_element** menu_choice, volatile uint8_t* adc);
 menu_element* create_menu();
 void print_page(menu_element* node);
+void print_score(void);
 void print_marker(uint8_t line);
+
 #endif

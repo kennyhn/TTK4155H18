@@ -37,11 +37,13 @@ void timer_interrupt_init(){
 }
 
 ISR(TIMER1_OVF_vect){
+  high_score++;
+
 
   int16_t reference=position_reference; // kan settes til 128 for testing
   int16_t position=transform_encoder_to_position(read_encoder());
-  printf("R %d \n", position_reference);
-  printf("P %d \n", position);
+  //printf("R %d \n", position_reference);
+  //printf("P %d \n", position);
   int16_t e = reference - position;
 
   total_e += e;
