@@ -12,7 +12,7 @@ void SRAM_test(void){
     uint16_t ext_ram_size = 0x800;
     uint16_t write_errors = 0;
     uint16_t retrieval_errors = 0;
-    MCUCR = MCUCR|(1<<SRE); //activate XMEM
+    //MCUCR = MCUCR|(1<<SRE); //activate XMEM
     printf("Starting SRAM test... \n");
 
     uint16_t seed = rand();
@@ -105,9 +105,9 @@ uint8_t SRAM_read_oled_data(uint8_t page, uint8_t column){
 
 void GAL_test(void){
     DDRC |= (0b111<<DDC1); //Setter DDC1-3 til write-modus
-    PORTC &= (!(1<<PORTC3));
+    PORTC &= ~(1<<PORTC3);
     PORTC |= (1<<PORTC2);
     DDRD |= (1 << DDD7);
-    PORTD &= (!(1<<PORTD7));
+    PORTD &= ~(1<<PORTD7);
 
 }

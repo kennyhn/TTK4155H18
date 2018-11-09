@@ -17,18 +17,14 @@ int main(){
     USART_Init(MYUBRR);
     MCUCR = MCUCR|(1<<SRE); //activate XMEM
     can_normal_init();
+    oled_init();
     sei();
-    printf("1 fors: %x\n",MCUCR);
     interrupt_int0_init();
-    printf("2 fors: %x\n",MCUCR); //activate interrupt vector 0
     can_message_received = 0;
 
-
-    //printf("%d",can_message_received);
-    //printf("Hei sjef\n");
+    
     //SRAM_test();
-    //oled_init();
-    //menu_driver();
+    menu_driver();
     //SPI_master_init();
     //while(1){
       //SPI_master_transmit('a');

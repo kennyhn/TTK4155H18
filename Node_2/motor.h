@@ -5,8 +5,8 @@
 
 
 void motor_init(void);
-void motor_driver(int8_t motor_value);
+void motor_driver(int16_t motor_value);
 void reset_encoder();
 int16_t read_encoder();
-uint8_t transform_encoder_to_position(int16_t encoder_data);
+int16_t transform_encoder_to_position(int16_t encoder_data);
 #endif

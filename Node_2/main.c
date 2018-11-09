@@ -54,6 +54,7 @@ int main(){
   joystick_direction jd;
   joystick_raw_data jrd;
   slider_raw_data srd;
+
   reset_encoder();
 
   while(1){
@@ -64,18 +65,17 @@ int main(){
         receive_console_message(&jrd,&jd, &srd);
         //TBD
         //Mottar joystick-meldingen i main. Sender kun inn X_value til pwm_driver og ikke hele meldingen
-        pwm_driver(jrd.Y_value);
+        pwm_driver(jrd.X_value);
         position_reference=srd.right_slider_value;
+        //printf("Position reference: %d \n", position_reference);
         solenoid_control(jrd.button_pressed);
         printf("%d\n", jrd.button_pressed);
         //motor_driver(jrd.X_value-128);
         //receive_joystick_message(&jpa,&jd);
         //printf("Message id %d\nMessage length %d \nMessage data %c\n", rmsg.id,rmsg.length,rmsg.data[0]);
     }
-    int16_t encoder_data = read_encoder();
     uint16_t data = adc_read();
     //printf("Data = %d \n", data);
-    //printf("Encoder = %d \n",encoder_data);
   }
   return 0;
 }

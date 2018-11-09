@@ -136,11 +136,9 @@ void interrupt_int0_init(void){
   DDRD &= ~(1<<PD2);
   // Disable global interrupts
   cli();
-
   //Interrupt on rising edge PD2
   MCUCR |= (1<<ISC01);
-  printf("ddd\n");
-  MCUCR &= !(1<<ISC00);
+  MCUCR &= ~(1<<ISC00);
   //Enable interrupt on PD2
   GICR |= (1<<INT0);
 

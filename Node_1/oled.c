@@ -57,7 +57,6 @@ void oled_init(){
 
     oled_reset();
     SRAM_OLED_reset();
-
 }
 
 

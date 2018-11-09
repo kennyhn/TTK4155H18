@@ -1,5 +1,5 @@
 # List all source files to be compiled; separate with space
-SOURCE_FILES := main.c uart.c spi.c mcp2515.c can.c pwm.c adc_arduino.c TWI_Master.c motor.c #timer.c game.c
+SOURCE_FILES := main.c uart.c spi.c mcp2515.c can.c pwm.c adc_arduino.c TWI_Master.c motor.c  #game.c
 
 # Set this flag to "yes" (no quotes) to use JTAG; otherwise ISP (SPI) is used
 PROGRAM_WITH_JTAG := yes

@@ -10,7 +10,6 @@ void menu_driver(void){
     volatile uint8_t *adc = (uint8_t*) 0x1400;
     joystick_direction dir;
     menu_element* menu_choice = create_menu();
-
     while (1){
         dir = check_joystick_direction(adc);
         if (dir == UP && menu_choice->up!=NULL){
@@ -30,6 +29,26 @@ void menu_driver(void){
         print_marker(menu_choice->line);
     }
 }
+
+/*void menu_driver(void){
+      dir = check_joystick_direction(adc);
+      if (dir == UP && menu_choice->up!=NULL){
+          menu_choice=menu_choice->up;
+      }
+      else if (dir == DOWN && menu_choice->down!=NULL){
+          menu_choice=menu_choice->down;
+      }
+      else if(dir == RIGHT && menu_choice->choose!=NULL){
+          menu_choice=menu_choice->choose;
+          print_page(menu_choice);
+      }
+      else if(dir==LEFT && menu_choice->back!=NULL){
+          menu_choice=menu_choice->back;
+          print_page(menu_choice);
+      }
+      print_marker(menu_choice->line);
+}
+*/
 
 menu_element* create_menu_element(char* name,uint8_t line, menu_element* up, menu_element* down, menu_element* choose, menu_element* back){
     menu_element* e = malloc(sizeof(*e));
