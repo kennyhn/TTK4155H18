@@ -12,7 +12,6 @@ void SRAM_test(void){
     uint16_t ext_ram_size = 0x800;
     uint16_t write_errors = 0;
     uint16_t retrieval_errors = 0;
-    //MCUCR = MCUCR|(1<<SRE); //activate XMEM
     printf("Starting SRAM test... \n");
 
     uint16_t seed = rand();

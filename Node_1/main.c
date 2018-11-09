@@ -15,41 +15,24 @@
 int main(){
     cli();
     USART_Init(MYUBRR);
-    MCUCR = MCUCR|(1<<SRE); //activate XMEM
+    MCUCR |= (1<<SRE); //activate XMEM
     can_normal_init();
     oled_init();
     sei();
+
     interrupt_int0_init();
     can_message_received = 0;
 
-    
+    //Set up menu
+    volatile uint8_t* adc = (uint8_t*) 0x1400;
+    joystick_direction dir;
+    menu_element* menu_choice = create_menu(); //creating the menu
+
     //SRAM_test();
-    menu_driver();
-    //SPI_master_init();
-    //while(1){
-      //SPI_master_transmit('a');
-    //}
 
-    /*SPI_master_init(); // Initialize SPI
     while(1){
-        printf("0x%x\r\n",mcp2515_read(MCP_CANSTAT));
-        //mcp2515_reset(); // Send reset-command
-        _delay_ms(100);
-    }
-    /*SRAM_OLED_reset();
-    SRAM_oled_print8(0,0,"Main menu");
-    SRAM_writes_to_screen();*/
-
-    //mcp2515_init();
-
-    //can_message message;
-    //can_message rmsg;
-    //message.id = 1;
-    //message.length = 1;
-    //message.data[0] = (uint8_t)'U';
-    //can_message_send(&message);
-    while(1){
-      send_console_message();
+      menu_driver(dir, &menu_choice,adc); //Updating the menu
+      
       /*if(can_message_received){
           can_message_received = 0;
           rmsg=can_data_receive();

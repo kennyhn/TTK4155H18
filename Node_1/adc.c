@@ -35,7 +35,6 @@ void r_slider(volatile uint8_t *adc){
 
 
 void run_joystick(){
-    MCUCR = MCUCR|(1<<SRE); //activate XMEM
     volatile uint8_t *adc = (uint8_t*) 0x1400;
     //joystick_y_axis(adc);
     //joystick_x_axis(adc);

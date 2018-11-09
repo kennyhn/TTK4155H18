@@ -1,7 +1,6 @@
 #ifndef GAME_H_
 #define GAME_H_
-#include <time.h>
-
-int8_t score_count(uint16_t data, time_t start);
+#include <stdint.h>
+int8_t check_game_over();
 
 #endif

@@ -91,7 +91,6 @@ can_message can_data_receive(void){
 
 void send_console_message(){
   //send joystick joystick direction
-  MCUCR = MCUCR|(1<<SRE); //activate XMEM
   volatile uint8_t* adc = (uint8_t*)0x1400;
   joystick_direction jd = check_joystick_direction(adc);
   //joystick_perc_angle jpa = get_perc_angle(adc);

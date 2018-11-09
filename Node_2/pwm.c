@@ -72,7 +72,7 @@ void solenoid_control(uint8_t jrd_button_pressed){
 
   DDRB |= (1<<PB4);//Setter port C pinne 3 til write
 
-  if(!jrd_button_pressed){
+  if(jrd_button_pressed){
     PORTB |= (1<<PB4);
   }
   else{

@@ -30,8 +30,6 @@ void oled_reset(void){
 }
 
 void oled_init(){
-    MCUCR = MCUCR|(1<<SRE); //activate XMEM
-
     write_c(0xae);        //  display  off
     write_c(0xa1);        //segment  remap
     write_c(0xda);        //common  pads  hardware:  alternative
@@ -182,6 +180,8 @@ void draw_circle(uint8_t x0, uint8_t y0, uint8_t r){
     }
     SRAM_writes_to_screen();
 }
+
+
 
 void draw_line(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2){
     double a = (y2-y1) / (double)(x2-x1);
