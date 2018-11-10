@@ -51,7 +51,6 @@ int16_t read_encoder(){
   return data;
 }
 
-
 void motor_driver(int16_t motor_value){
   if(motor_value>0){
       PORTH |= (1<<PH1); //setting motor direction right

@@ -2,7 +2,10 @@
 #include "oled.h"
 #include "sram.h"
 #include "game.h"
+#include "can.h"
 #include <avr/io.h>
+#include <util/delay.h>
+
 volatile int32_t high_score = 0;
 
 void menu_driver(joystick_direction dir, menu_element** menu_choice,volatile uint8_t* adc){
@@ -16,9 +19,13 @@ void menu_driver(joystick_direction dir, menu_element** menu_choice,volatile uin
     else if(dir == RIGHT && (*menu_choice)->choose!=NULL){
         *menu_choice=(*menu_choice)->choose;
         if ((*menu_choice)->name == "Game"){
+          //int8_t first = 1;
           high_score = play_game();
           *menu_choice=(*menu_choice)->back;
           print_score();
+          /*_delay_ms(1000);
+          printf("Reset flag\n");
+          can_message_received = 0;*/
         }
         else{
             print_page(*menu_choice);
@@ -68,7 +75,6 @@ void print_page(menu_element* node){
         temp = temp->up;
         SRAM_oled_print5(--i, 5, temp->name);
     }
-
 }
 
 void print_score(void){

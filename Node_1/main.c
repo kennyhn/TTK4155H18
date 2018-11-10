@@ -16,6 +16,7 @@ int main(){
     cli();
     USART_Init(MYUBRR);
     MCUCR |= (1<<SRE); //activate XMEM
+    printf("\n\n\n\n\n\n\n");
     can_normal_init();
     oled_init();
     sei();

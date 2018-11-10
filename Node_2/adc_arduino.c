@@ -19,7 +19,7 @@ uint16_t adc_read(void){
     //Starting conversion
     ADCSRA |= (1<<ADSC);
     //Check if the conversion is complete (feilsøk denne først, mulig det må endres til et annet register/fjernes)
-    //while(!(ADCSRA&(1<<ADIF)));
+    while(!(ADCSRA&(1<<ADIF)));
     //Read the conversion
     uint16_t data_low = ADCL;
     uint16_t data_high = (ADCH<<8);

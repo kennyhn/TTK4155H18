@@ -74,6 +74,7 @@ joystick_perc_angle get_perc_angle(volatile uint8_t *adc){
 
 joystick_direction check_joystick_direction(volatile uint8_t *adc){
     joystick_perc_angle jpa = get_perc_angle(adc);
+    //printf("X-value: %d \n Y-value: %d \n", jpa.X_value, jpa.Y_value);
     if(abs(jpa.X_value) < 10 && abs(jpa.Y_value) < 10 ){
         return NEUTRAL;
     }

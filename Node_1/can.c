@@ -110,14 +110,13 @@ void send_console_message(){
 
   can_message msg;
   msg.id = 10;
-  msg.length = 6; //6 når vi får med knappen
+  msg.length = 6;
   msg.data[0]=jrd.X_value;
   msg.data[1]=jrd.Y_value;
   msg.data[2]=jrd.button_pressed;
   msg.data[3]=(uint8_t)jd;
   msg.data[4]=srd.left_slider_value;
   msg.data[5]=srd.right_slider_value;
-  //printf("her er x-value %d \n", (int8_t)msg.data[0]);
   can_message_send(&msg);
 }
 

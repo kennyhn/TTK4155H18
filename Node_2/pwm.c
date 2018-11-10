@@ -38,20 +38,15 @@ void timer_interrupt_init(){
 
 ISR(TIMER1_OVF_vect){
   high_score++;
-
-
   int16_t reference=position_reference; // kan settes til 128 for testing
   int16_t position=transform_encoder_to_position(read_encoder());
   //printf("R %d \n", position_reference);
   //printf("P %d \n", position);
   int16_t e = reference - position;
-
   total_e += e;
-
   if (abs(total_e)>1000 || abs(e) < 1){
     total_e = e;
   }
-
   //printf("%d",total_e);
   int16_t u = 1*e+0.020*1*total_e;
   motor_driver(u); // this is our input

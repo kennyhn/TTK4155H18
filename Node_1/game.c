@@ -3,7 +3,6 @@
 #include "oled.h"
 #include "uart.h"
 #include "sram.h"
-#define F_CPU 4915200
 #include <util/delay.h>
 
 int play_game(void){
@@ -27,10 +26,16 @@ int play_game(void){
 
     //Dette gjøres for å ikke få uforventet brudd pga game-over verdien blir liggende igjen.
     if (can_message_received){
-      while(can_message_received){
-          can_message_received = 0;
-          can_message rmsg = can_data_receive();
-          high_score =  rmsg.data[0];
+
+      can_message_received = 0;
+      can_message rmsg = can_data_receive();
+      printf("melding mottatt\n");
+      high_score = rmsg.data[0];
+      _delay_ms(600); //this might possibly need to be bigger or smaller
+      if (can_message_received){
+        printf("reset flag \n");
+        can_message_received = 0;
+        can_data_receive();
       }
       printf("Everything's good\n");
       return high_score;
@@ -43,13 +48,12 @@ int play_game(void){
     draw_circle(x1,y1,r1);
     draw_circle(x2,y2,r2);
     draw_circle(x3,y3,r3);
-
+    printf("spiller\n");
     send_console_message();
     x0+=3;
     x1+=3;
     x2+=3;
     x3+=3;
-
     if (x0 >= 120){
       x0 = 8;
     }

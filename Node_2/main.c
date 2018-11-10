@@ -16,7 +16,7 @@ int main(){
   position_reference=0;
   total_e = 0;
   can_message_received = 0;
-
+  printf("\n\n\n\n\n\n\n");
   cli();
   adc_init();
   can_normal_init();
@@ -25,11 +25,9 @@ int main(){
   motor_init();
   sei();
   timer_interrupt_init();
-
   joystick_direction jd;
   joystick_raw_data jrd;
   slider_raw_data srd;
-
   reset_encoder();
   adc_read(); //To prevent first read to be zero
   _delay_ms(4); //To prevent first read to be zero
@@ -43,19 +41,15 @@ int main(){
         //må fikse tidsforsinkelse for ADC. Heller bruke en interrupt enn delay
         pwm_driver(jrd.X_value);
         position_reference=srd.right_slider_value;
-        //printf("Position reference: %d \n", position_reference);
         solenoid_control(jrd.button_pressed);
-        printf("%d\n", jrd.button_pressed);
-        //motor_driver(jrd.X_value-128);
-        //receive_joystick_message(&jpa,&jd);
-        //printf("Message id %d\nMessage length %d \nMessage data %c\n", rmsg.id,rmsg.length,rmsg.data[0]);
+        //printf("%d\n", jrd.button_pressed);
         int i = 0;
         if(check_game_over()){
-          printf("high score: %d\n", high_score);
+          printf("high score: %d\n", high_score/50);
           can_message smsg;
           smsg.id = 1;
           smsg.length = 2;
-          smsg.data[i] = (uint8_t)high_score;
+          smsg.data[i] = (uint8_t)high_score/50; //divide by 50 to get seconds
           can_message_send(&smsg);
           high_score=0;
           //TBD
@@ -67,4 +61,4 @@ int main(){
 }
 
 // Må løse at data<20 fra adc to++ ganger, noe skaper problemer både i node 1 og 2. Løsningen vi har nå funker
-// men er ikke optimal. 
+// men er ikke optimal.
