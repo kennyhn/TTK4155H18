@@ -21,6 +21,7 @@ int main(){
     oled_init();
     sei();
 
+
     interrupt_int0_init();
     can_message_received = 0;
 

@@ -41,6 +41,7 @@ int play_game(void){
       return high_score;
     }
     SRAM_OLED_reset();
+
     draw_circle(x0,y0,r0);
     draw_line(x0-2,x0+2, y0+2, y0+2);
     draw_line(x0+1,x0+2, y0-2,y0-2);

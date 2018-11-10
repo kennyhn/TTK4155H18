@@ -207,3 +207,60 @@ void print_pixel(uint8_t x, uint8_t y){
     //*oled_data |=(1<<(y%8));
     SRAM_write_to_mem(row,column,SRAM_read_oled_data(row,column)|(1<<(y%8)));
 }
+
+//dir = 0, halvsirkel i negativt y-plan
+//dir = 1, halvsirkel i positivt y-plan
+void draw_half_circle(uint8_t x0, uint8_t y0, uint8_t r, int dir){
+    for(uint8_t x = x0-r; x<= x0 + r; x++){
+        if (dir == 0){
+            uint8_t y = sqrt(pow(r,2)-pow((x-x0),2)) + y0;
+            print_pixel(x,y);
+        }
+        else {
+            uint8_t y = -sqrt(pow(r,2)-pow((x-x0),2)) + y0;
+            print_pixel(x,y);
+        }
+
+    }
+    if (dir == 0){
+        for(uint8_t y = y0-r; y<= y0; y++){
+            uint8_t x = sqrt(pow(r,2)-pow((y-y0),2)) + x0;
+            print_pixel(x,y);
+            x = -sqrt(pow(r,2)-pow((y-y0),2)) + x0;
+            print_pixel(x,y);
+        }
+
+    }
+    else{
+    for(uint8_t y = y0; y<= y0 + r; y++){
+        uint8_t x = sqrt(pow(r,2)-pow((y-y0),2)) + x0;
+        print_pixel(x,y);
+        x = -sqrt(pow(r,2)-pow((y-y0),2)) + x0;
+        print_pixel(x,y);
+    }
+    }
+    SRAM_writes_to_screen();
+}
+
+
+void draw_smiley(uint8_t x0, uint8_t y0, uint8_t r){
+    //Face
+    draw_circle(x0,y0,r);
+
+    //Mouth
+    draw_line(x0-2,x0+2, y0+2, y0+2);
+    draw_half_circle(x0,y0+2,4,1); //må kanskje endre dir
+
+    //Nose
+    draw_line(x0,x0, y0-1, y0+1);
+
+    //Left eye
+    draw_circle(x0-2, y0-2, 1);
+    draw_line(x0-3,x0-1, y0-2,y0-2);
+
+
+    //Right eye
+    draw_circle(x0+2, y0-2, 1);
+    draw_line(x0+1,x0+3, y0-2,y0-2);
+
+}
