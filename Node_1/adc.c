@@ -23,6 +23,7 @@ void l_slider(volatile uint8_t *adc){
     _delay_ms(1);
     *adc = 0x06;
     _delay_ms(60);
+    //printf("%d\n",*adc);
 }
 
 // R-slider oppe til ventre
@@ -31,6 +32,7 @@ void r_slider(volatile uint8_t *adc){
     _delay_ms(1);
     *adc = 0x07;
     _delay_ms(60);
+    //printf("%d\n",*adc);
 }
 
 

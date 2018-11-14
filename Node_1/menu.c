@@ -6,34 +6,37 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-volatile int32_t high_score = 0;
+volatile uint8_t high_score = 0;
 
-void menu_driver(joystick_direction dir, menu_element** menu_choice,volatile uint8_t* adc){
-    dir = check_joystick_direction(adc);
-    if (dir == UP && (*menu_choice)->up!=NULL){
-        *menu_choice=(*menu_choice)->up;
-    }
-    else if (dir == DOWN && (*menu_choice)->down!=NULL){
-        *menu_choice=(*menu_choice)->down;
-    }
-    else if(dir == RIGHT && (*menu_choice)->choose!=NULL){
-        *menu_choice=(*menu_choice)->choose;
-        if ((*menu_choice)->name == "Game"){
-          //int8_t first = 1;
-          high_score = play_game();
-          *menu_choice=(*menu_choice)->choose; //score
-        }
-        print_page(*menu_choice);
-    }
-    else if(dir==LEFT && (*menu_choice)->back!=NULL){
-        *menu_choice=(*menu_choice)->back;
-        print_page(*menu_choice);
-    }
-    if ((*menu_choice)->name != "Score"){
-      print_marker((*menu_choice)->line);
+void menu_driver(joystick_direction* dir, menu_element** menu_choice,volatile uint8_t* adc){
+    joystick_direction prev_dir = *dir;
+    *dir = check_joystick_direction(adc);
+    if (prev_dir == NEUTRAL){
+      if (*dir == UP && (*menu_choice)->up!=NULL){
+          *menu_choice=(*menu_choice)->up;
+      }
+      else if (*dir == DOWN && (*menu_choice)->down!=NULL){
+          *menu_choice=(*menu_choice)->down;
+      }
+      else if(*dir == RIGHT && (*menu_choice)->choose!=NULL){
+          *menu_choice=(*menu_choice)->choose;
+          if ((*menu_choice)->name == "Game"){
+            high_score = play_game();
+            printf("%d", high_score);
+            save_high_score(high_score);
+            *menu_choice=(*menu_choice)->choose; //score
+          }
+          print_page(*menu_choice);
+      }
+      else if(*dir==LEFT && (*menu_choice)->back!=NULL){
+          *menu_choice=(*menu_choice)->back;
+          print_page(*menu_choice);
+      }
+      if ((*menu_choice)->name != "Score" && (*menu_choice)->name != "Highscore table"){
+        print_marker((*menu_choice)->line);
+      }
     }
 }
-
 
 menu_element* create_menu_element(char* name,uint8_t line, menu_element* up, menu_element* down, menu_element* choose, menu_element* back){
     menu_element* e = malloc(sizeof(*e));
@@ -53,13 +56,16 @@ void print_page(menu_element* node){
   if (node->name == "Score"){
     SRAM_oled_print8(0,0,"Score");
     //SRAM_oled_print8(5,3, highscore); need to convert uint8_t to char*
-    if (high_score > 100){
+    if (high_score > 20){
       SRAM_oled_print8(5,4, "Nice!");
     }
     else{
         SRAM_oled_print8(5,4, "Hopeless!");
     }
     SRAM_writes_to_screen();
+  }
+  else if (node->name == "Highscore table"){
+    print_high_score();
   }
   else{
     menu_element* temp = node;

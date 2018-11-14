@@ -1,6 +1,7 @@
 #include "motor.h"
 #include "TWI_Master.h"
 #include "uart.h"
+#include "pwm.h"
 #include <util/delay.h>
 #include <avr/io.h>
 
@@ -35,6 +36,14 @@ int16_t transform_encoder_to_position(int16_t encoder_data){
   //printf("Encoder data: %d\n",encoder_data);
   int16_t data = encoder_data/(-8000.0)*255;
   return data;
+}
+
+void set_motor_start_point(){
+  volatile int32_t temp_highscore = high_score;
+  motor_driver(-70);
+  while ((high_score-temp_highscore) < 150);//wait for 1 seconds
+  motor_driver(0);
+  motor_set = 1;
 }
 
 int16_t read_encoder(){

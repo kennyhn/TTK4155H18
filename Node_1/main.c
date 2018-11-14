@@ -2,6 +2,7 @@
 #include <util/delay.h>
 #include <avr/io.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "uart.h"
 #include "sram.h"
 #include "adc.h"
@@ -10,16 +11,20 @@
 #include "spi.h"
 #include "mcp2515.h"
 #include "can.h"
+#include "game.h"
 
 
 int main(){
     cli();
     USART_Init(MYUBRR);
     MCUCR |= (1<<SRE); //activate XMEM
+    //SRAM_test();
     printf("\n\n\n\n\n\n\n");
     can_normal_init();
     oled_init();
+    high_score_init();
     sei();
+
 
 
     interrupt_int0_init();
@@ -30,10 +35,8 @@ int main(){
     joystick_direction dir;
     menu_element* menu_choice = create_menu(); //creating the menu
     printf("#############\n");
-    //SRAM_test();
-
     while(1){
-      menu_driver(dir, &menu_choice,adc); //Updating the menu
+      menu_driver(&dir, &menu_choice,adc); //Updating the menu
     }
     return 0;
 }
