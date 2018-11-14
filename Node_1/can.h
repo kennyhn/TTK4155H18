@@ -8,7 +8,7 @@
 #include <avr/sleep.h>
 
 int can_message_received;
-
+int can_allowed_to_send_flag;
 typedef struct Can_message{
     unsigned int id;
     uint8_t length;
@@ -24,8 +24,7 @@ void send_console_message();
 uint8_t can_int_vect();
 //int can_transmit_complete();
 
-void interrupt_int0_init();
-
+void can_receive_interrupt(void);
 
 
 #endif

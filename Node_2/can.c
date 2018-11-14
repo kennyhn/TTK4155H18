@@ -65,6 +65,8 @@ void can_message_send(can_message* message){
 can_message can_data_receive(void){
   can_message message;
   while(!(can_int_vect() & MCP_RX0IF));
+  can_message_received=0;
+  printf("after second while\n");
   if(mcp2515_read_status() & MCP_RX0IF){
     message.id = (mcp2515_read(MCP_RXB0SIDH) << 3 | mcp2515_read(MCP_RXB0SIDL) >> 5);
     message.length = (0x0F) & mcp2515_read(MCP_RXB0DLC);
@@ -85,11 +87,11 @@ void receive_console_message(joystick_raw_data* jrd, joystick_direction* jd, sli
   can_message rmsg;
   rmsg=can_data_receive();
   jrd->X_value=rmsg.data[0];
-  jrd->Y_value=rmsg.data[1];
-  jrd->button_pressed=rmsg.data[2];
-  *jd=(int8_t)rmsg.data[3];
-  srd->left_slider_value=rmsg.data[4];
-  srd->right_slider_value=rmsg.data[5];
+  //jrd->Y_value=rmsg.data[1];
+  jrd->button_pressed=rmsg.data[1]; //var 2
+  //*jd=(int8_t)rmsg.data[3];
+  //srd->left_slider_value=rmsg.data[4];
+  srd->right_slider_value=rmsg.data[2]; //var 5
 }
 
 //Check if there is an interrupt in CAN-controller

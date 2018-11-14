@@ -53,7 +53,7 @@ uint8_t play_game(void){
     draw_circle(x1,y1,r1);
     draw_circle(x2,y2,r2);
     draw_circle(x3,y3,r3);
-    printf("spiller\n");
+    //printf("spiller\n");
     send_console_message();
     x0+=3;
     x1+=3;
@@ -107,7 +107,6 @@ void save_high_score(uint8_t value){
   }
   for (int i = 0; i<HIGH_SCORE_LENGTH; i++){
     ext_ram[i]=temp_high_score[i]; //update high score in SRAM
-    printf("temp high: %d\n", temp_high_score[i]);
   }
 
 }

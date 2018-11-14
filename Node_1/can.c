@@ -1,6 +1,9 @@
 #include "can.h"
 #include "mcp2515.h"
 #include "adc.h"
+#include "timer.h"
+
+
 
 int can_loopback_init(){
   if (mcp2515_init()){ //Setup mcp while checking if it is set up right
@@ -99,10 +102,10 @@ void send_console_message(){
   slider_raw_data srd;
   joystick_x_axis(adc);
   jrd.X_value = *adc;
-  joystick_y_axis(adc);
-  jrd.Y_value = *adc;
-  l_slider(adc);
-  srd.left_slider_value = *adc;
+  //joystick_y_axis(adc);
+  //jrd.Y_value = *adc;
+  //l_slider(adc);
+  //srd.left_slider_value = *adc;
   r_slider(adc);
   srd.right_slider_value = *adc;
 
@@ -110,15 +113,21 @@ void send_console_message(){
 
   can_message msg;
   msg.id = 10;
-  msg.length = 6;
+  msg.length = 3;
   msg.data[0]=jrd.X_value;
-  msg.data[1]=jrd.Y_value;
-  msg.data[2]=jrd.button_pressed;
-  msg.data[3]=(uint8_t)jd;
-  msg.data[4]=srd.left_slider_value;
-  msg.data[5]=srd.right_slider_value;
-  can_message_send(&msg);
+  //msg.data[1]=jrd.Y_value;
+  msg.data[1]=jrd.button_pressed; //var 2
+  //msg.data[3]=(uint8_t)jd;
+  //msg.data[4]=srd.left_slider_value;
+  msg.data[2]=srd.right_slider_value; //var 5
+  if (can_allowed_to_send_flag){
+    can_message_send(&msg);
+    printf("Message is sent: %d\n", msg.data[0]);
+    can_allowed_to_send_flag=0;
+  }
 }
+
+
 
 //Check if there is an interrupt in CAN-controller
 uint8_t can_int_vect(){
@@ -129,7 +138,7 @@ int can_transmit_complete(uint8_t buffer){
   return ;//return 1 when the transmit is complete
 }*/
 
-void interrupt_int0_init(void){
+void can_receive_interrupt(void){
   //  Set pin to input
   DDRD &= ~(1<<PD2);
   // Disable global interrupts
@@ -144,6 +153,8 @@ void interrupt_int0_init(void){
   sei();
 
 }
+
+
 
 ISR(INT0_vect){
   can_message_received = 1;

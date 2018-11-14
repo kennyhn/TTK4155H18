@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdint.h>
 
+static int timer_100ms_flag=0;
+
 typedef enum Joystick_direction{LEFT, RIGHT, UP, DOWN,NEUTRAL}joystick_direction;
 typedef struct Joystick_perc_angle{
     int8_t X_value;

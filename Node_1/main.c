@@ -12,7 +12,7 @@
 #include "mcp2515.h"
 #include "can.h"
 #include "game.h"
-
+#include "timer.h"
 
 int main(){
     cli();
@@ -24,10 +24,10 @@ int main(){
     oled_init();
     high_score_init();
     sei();
+    timer_interrupt_init();
 
 
-
-    interrupt_int0_init();
+    can_receive_interrupt();
     can_message_received = 0;
 
     //Set up menu

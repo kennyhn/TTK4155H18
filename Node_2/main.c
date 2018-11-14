@@ -35,16 +35,20 @@ int main(){
   joystick_direction jd;
   joystick_raw_data jrd;
   slider_raw_data srd;
-  reset_encoder(); //set ecoder start point
+  printf("before while\n");
+  /*while(can_message_received){
+    can_data_receive();
+    printf("can flag: %d", can_message_received);
+  }*/
+  //can_message_received=0;
   printf("kommer hit\n");
-  while(can_message_received)can_data_receive();
-  can_message_received=0;
   adc_read(); //To prevent first read to be zero
   _delay_ms(4); //To prevent first read to be zero
+  //can_data_receive();
   while(1){
+
     if(can_message_received){
         printf("Can message received\n");
-        can_message_received = 0;
         //Let CAN be driven outside this function
         receive_console_message(&jrd,&jd, &srd);
         //TBD

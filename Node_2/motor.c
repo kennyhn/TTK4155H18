@@ -44,6 +44,7 @@ void set_motor_start_point(){
   while ((high_score-temp_highscore) < 150);//wait for 1 seconds
   motor_driver(0);
   motor_set = 1;
+  reset_encoder(); //set ecoder start point
 }
 
 int16_t read_encoder(){
