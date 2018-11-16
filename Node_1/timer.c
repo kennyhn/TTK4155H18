@@ -13,18 +13,10 @@
 //int=F_CPU/PRESCALER*period
 void timer_interrupt_init(void){
   cli();
-  //Want to use CTC mode so the timer is cleared on comparison
-  TCCR0 |= (1<<WGM01);
-
-  //Sets 1024
-  TCCR0 |= (1<<CS02) | (1<<CS00);
-
-  //Setter top value
-  OCR0 = (F_CPU/PRESCALER)*PERIOD;
-
-  //Enable interrupt
-  TIMSK |= (1<<OCIE0);
-
+  TCCR0 |= (1<<WGM01);//Want to use CTC mode so the timer is cleared on comparison
+  TCCR0 |= (1<<CS02) | (1<<CS00);//Sets 1024
+  OCR0 = (F_CPU/PRESCALER)*PERIOD;//Setter top value
+  TIMSK |= (1<<OCIE0);//Enable interrupt
   //TCNT0 = 0;
   sei();
   can_allowed_to_send_flag=0;
@@ -32,7 +24,7 @@ void timer_interrupt_init(void){
 
 
 ISR(TIMER0_COMP_vect){
-  static int counter = 0;
+  static uint32_t counter = 0;
 
   //Flag is set every 50ms
   if ((counter%3)==0){
@@ -46,9 +38,5 @@ ISR(TIMER0_COMP_vect){
   if ((counter%60) == 0){
     highscore++;
   }
-  //printf("counter %d\n", counter);
-  //if (counter == 255)counter=0; //To prevent overflow of coutner
   counter++;
-
-  //TCNT0 = 0;
 }
