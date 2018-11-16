@@ -40,7 +40,6 @@ ISR(TIMER0_COMP_vect){
   }
   //flag is set every 100 ms
   if ((counter%6)==0){
-    timer_100ms_flag=1;
   }
 
   //flag is set every second

@@ -25,10 +25,11 @@ int main(){
     high_score_init();
     sei();
     timer_interrupt_init();
+    adc_interrupt_init();
 
 
     can_receive_interrupt();
-    can_message_received = 0;
+
 
     //Set up menu
     volatile uint8_t* adc = (uint8_t*) 0x1400;

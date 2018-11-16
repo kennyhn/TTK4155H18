@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-static int timer_100ms_flag=0;
+volatile uint8_t adc_is_ready_flag;
 
 typedef enum Joystick_direction{LEFT, RIGHT, UP, DOWN,NEUTRAL}joystick_direction;
 typedef struct Joystick_perc_angle{
@@ -32,10 +32,10 @@ void r_slider(volatile uint8_t *adc);
 
 void l_slider(volatile uint8_t *adc);
 
-void run_joystick();
-
 joystick_perc_angle get_perc_angle(volatile uint8_t *adc);
 
 joystick_direction check_joystick_direction(volatile uint8_t *adc);
+
+void adc_interrupt_init(void);
 
 #endif

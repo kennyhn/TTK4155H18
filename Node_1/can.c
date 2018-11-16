@@ -74,7 +74,6 @@ void can_message_send(can_message* message){
   while(!(mcp2515_read_status() & MCP_TX0IF));
 }
 
-
 can_message can_data_receive(void){
   can_message message;
   while(!(mcp2515_read_status() & MCP_RX0IF));
@@ -127,12 +126,11 @@ void send_console_message(){
   }
 }
 
-
-
 //Check if there is an interrupt in CAN-controller
 uint8_t can_int_vect(){
   return mcp2515_read(MCP_CANINTF);
 }
+
 /*
 int can_transmit_complete(uint8_t buffer){
   return ;//return 1 when the transmit is complete
@@ -143,7 +141,7 @@ void can_receive_interrupt(void){
   DDRD &= ~(1<<PD2);
   // Disable global interrupts
   cli();
-  //Interrupt on rising edge PD2
+  //Interrupt on falling edge PD2
   MCUCR |= (1<<ISC01);
   MCUCR &= ~(1<<ISC00);
   //Enable interrupt on PD2
@@ -151,7 +149,7 @@ void can_receive_interrupt(void){
 
   //Enable global interrupts
   sei();
-
+  can_message_received = 0;
 }
 
 
