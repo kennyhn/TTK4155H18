@@ -34,10 +34,19 @@ void timer_interrupt_init(){
   cli(); // Disable global interrupts
   TIMSK1 |= (1<<TOIE1); //Enabling OVERFLOW INTERRUPT
   sei(); //Enable global interrupts
+
+  can_allowed_to_send_flag = 0;
 }
 
 ISR(TIMER1_OVF_vect){
   high_score++;
+  static int counter = 0;
+
+  if (counter%5 == 0){
+    //Sets the flag every 100ms (10Hz)
+    can_allowed_to_send_flag = 1;
+  }
+
   if (motor_set){
     int16_t reference=position_reference; // kan settes til 128 for testing
     int16_t position=transform_encoder_to_position(read_encoder());
@@ -52,6 +61,7 @@ ISR(TIMER1_OVF_vect){
     int16_t u = 1*e+0.020*1*total_e;
     motor_driver(u); // this is our input
   }
+    counter++;
 }
 
 void pwm_driver(double x_value_raw){

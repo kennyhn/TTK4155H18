@@ -8,7 +8,6 @@
 
 
 int8_t check_game_over(void){
-  //_delay_ms(30);
   uint16_t data = adc_read();
   printf("Data = %d \n", data);
   if (data < 100){

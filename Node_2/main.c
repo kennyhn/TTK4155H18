@@ -44,7 +44,7 @@ int main(){
   printf("kommer hit\n");
   adc_read(); //To prevent first read to be zero
   _delay_ms(4); //To prevent first read to be zero
-  //can_data_receive();
+  can_data_receive();
   while(1){
 
     if(can_message_received){
@@ -64,7 +64,10 @@ int main(){
           smsg.length = 2;
           smsg.data[i] = (uint8_t)(high_score/50); //divide by 50 to get seconds
           printf("high score divided %d\n", smsg.data[i]);
-          can_message_send(&smsg);
+          if (can_allowed_to_send_flag){
+            can_message_send(&smsg);
+            can_allowed_to_send_flag=0;
+          }
           high_score=0;
           //TBD
         }

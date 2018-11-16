@@ -5,6 +5,7 @@
 volatile int16_t position_reference;
 volatile int16_t total_e;
 volatile int32_t high_score;
+volatile int8_t can_allowed_to_send_flag;
 
 void pwm_init(void);
 void pwm_driver(double x_value_raw);
