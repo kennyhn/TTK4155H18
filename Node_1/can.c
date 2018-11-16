@@ -91,37 +91,30 @@ can_message can_data_receive(void){
   return message;
 }
 
-void send_console_message(){
-  //send joystick joystick direction
+void send_console_message(uint8_t K_p,uint8_t K_i){
+  //send joystick direction
   volatile uint8_t* adc = (uint8_t*)0x1400;
   joystick_direction jd = check_joystick_direction(adc);
-  //joystick_perc_angle jpa = get_perc_angle(adc);
   /*using raw data for greater resolution*/
   joystick_raw_data jrd;
   slider_raw_data srd;
   joystick_x_axis(adc);
   jrd.X_value = *adc;
-  //joystick_y_axis(adc);
-  //jrd.Y_value = *adc;
-  //l_slider(adc);
-  //srd.left_slider_value = *adc;
   r_slider(adc);
   srd.right_slider_value = *adc;
-
   jrd.button_pressed = (PINB & (1<<PB2));
 
   can_message msg;
   msg.id = 10;
-  msg.length = 3;
+  msg.length = 5;
   msg.data[0]=jrd.X_value;
-  //msg.data[1]=jrd.Y_value;
-  msg.data[1]=jrd.button_pressed; //var 2
-  //msg.data[3]=(uint8_t)jd;
-  //msg.data[4]=srd.left_slider_value;
-  msg.data[2]=srd.right_slider_value; //var 5
+  msg.data[1]=jrd.button_pressed;
+  msg.data[2]=srd.right_slider_value;
+  msg.data[3]=K_p;
+  msg.data[4]=K_i;
+  //printf("K_p %d\nK_i %d\n",msg.data[3],K_i);
   if (can_allowed_to_send_flag){
     can_message_send(&msg);
-    printf("Message is sent: %d\n", msg.data[0]);
     can_allowed_to_send_flag=0;
   }
 }
@@ -130,11 +123,6 @@ void send_console_message(){
 uint8_t can_int_vect(){
   return mcp2515_read(MCP_CANINTF);
 }
-
-/*
-int can_transmit_complete(uint8_t buffer){
-  return ;//return 1 when the transmit is complete
-}*/
 
 void can_receive_interrupt(void){
   //  Set pin to input
@@ -152,9 +140,6 @@ void can_receive_interrupt(void){
   can_message_received = 0;
 }
 
-
-
 ISR(INT0_vect){
   can_message_received = 1;
-  printf("kommer i interrupt \n");
 }

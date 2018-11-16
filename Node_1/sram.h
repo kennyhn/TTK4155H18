@@ -10,11 +10,5 @@ void SRAM_write_to_mem(uint8_t page, uint8_t column, uint8_t screen_data);
 void SRAM_writes_to_screen();
 uint8_t SRAM_read_oled_data(uint8_t page, uint8_t column);
 
-
 void SRAM_test(void);
-
-//void LATCH_test(void);
-
-void GAL_test(void);
-
 #endif

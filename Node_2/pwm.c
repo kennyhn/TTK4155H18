@@ -6,9 +6,6 @@
 #include "motor.h"
 #include <avr/io.h>
 
-
-
-
 void pwm_init(void){
 
   DDRB |= (1<<PB5);
@@ -36,7 +33,7 @@ void timer_interrupt_init(){
 
 ISR(TIMER1_OVF_vect){
   static int counter = 0;
-
+  static int16_t total_e = 0;
   if (counter%5 == 0){
     //Sets the flag every 100ms (10Hz)
     can_allowed_to_send_flag = 1;
@@ -52,8 +49,7 @@ ISR(TIMER1_OVF_vect){
     if (abs(total_e)>1000 || abs(e) < 1){
       total_e = e;
     }
-    //printf("%d",total_e);
-    int16_t u = 1*e+0.020*1*total_e;
+    int16_t u = K_p*e+0.020*K_i*total_e;
     motor_driver(u); // this is our input
   }
     counter++;

@@ -170,7 +170,6 @@ void draw_circle(uint8_t x0, uint8_t y0, uint8_t r){
         print_pixel(x,y);
         y = -sqrt(pow(r,2)-pow((x-x0),2)) + y0;
         print_pixel(x,y);
-
     }
     for(uint8_t y = y0-r; y<= y0 + r; y++){
         uint8_t x = sqrt(pow(r,2)-pow((y-y0),2)) + x0;
@@ -180,8 +179,6 @@ void draw_circle(uint8_t x0, uint8_t y0, uint8_t r){
     }
     SRAM_writes_to_screen();
 }
-
-
 
 void draw_line(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2){
     double a = (y2-y1) / (double)(x2-x1);

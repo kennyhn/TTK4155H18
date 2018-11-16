@@ -8,7 +8,7 @@
 
 #define HIGH_SCORE_LENGTH 3 //CONSTANT
 
-uint8_t play_game(void){
+uint8_t play_game(uint8_t K_p,uint8_t K_i){
   uint8_t x0 = 8;
   uint8_t y0 = 8;
   uint8_t r0 = 8;
@@ -26,20 +26,14 @@ uint8_t play_game(void){
   uint8_t r3 = 6;
   highscore = 0;
   while(1){
-
-    //Dette gjøres for å ikke få uforventet brudd pga game-over verdien blir liggende igjen.
     if (can_message_received){
-
       can_message_received = 0;
       can_data_receive();
-      printf("melding mottatt\n");
-      _delay_ms(600); //this might possibly need to be bigger or smaller
+      _delay_ms(100); //this might possibly need to be bigger or smaller
       if (can_message_received){
-        printf("reset flag \n");
         can_message_received = 0;
         can_data_receive();
       }
-      printf("Everything's good\n");
       return highscore;
     }
     SRAM_OLED_reset();
@@ -51,8 +45,7 @@ uint8_t play_game(void){
     draw_circle(x1,y1,r1);
     draw_circle(x2,y2,r2);
     draw_circle(x3,y3,r3);
-    //printf("spiller\n");
-    send_console_message();
+    send_console_message(K_p,K_i);
     x0+=3;
     x1+=3;
     x2+=3;

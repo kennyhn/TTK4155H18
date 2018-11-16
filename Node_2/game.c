@@ -8,7 +8,7 @@
 int8_t check_game_over(void){
   uint16_t data = adc_read();
   printf("Data = %d \n", data);
-  if (data < 100){
+  if (data < 20){
     adc_read();
     return 1;
   }

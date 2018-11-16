@@ -52,7 +52,7 @@ joystick_perc_angle get_perc_angle(volatile uint8_t *adc){
 
 joystick_direction check_joystick_direction(volatile uint8_t *adc){
     joystick_perc_angle jpa = get_perc_angle(adc);
-    if(abs(jpa.X_value) < 10 && abs(jpa.Y_value) < 10 ){
+    if(abs(jpa.X_value) < 20 && abs(jpa.Y_value) < 20 ){
         return NEUTRAL;
     }
     else{
@@ -90,8 +90,6 @@ void adc_interrupt_init(void){
   adc_is_ready_flag=0;
 
 }
-
-
 
 ISR(INT2_vect){
   adc_is_ready_flag = 1;

@@ -34,10 +34,12 @@ int main(){
     //Set up menu
     volatile uint8_t* adc = (uint8_t*) 0x1400;
     joystick_direction dir;
+    uint8_t K_p;
+    uint8_t K_i;
     menu_element* menu_choice = create_menu(); //creating the menu
     printf("#############\n");
     while(1){
-      menu_driver(&dir, &menu_choice,adc); //Updating the menu
+      menu_driver(&K_p, &K_i,&dir, &menu_choice,adc); //Updating the menu
     }
     return 0;
 }

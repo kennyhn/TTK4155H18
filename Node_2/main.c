@@ -14,9 +14,10 @@ int main(){
   USART_Init(MYUBRR);
   can_interrupt_init();
   position_reference=0;
-  total_e = 0;
   can_message_received = 0;
   motor_set = 0;
+  K_p = 1;
+  K_i = 1;
   printf("\n\n\n\n\n\n\n");
 
   cli();
@@ -39,7 +40,6 @@ int main(){
     if(can_message_received){
         printf("Can message received\n");
         receive_console_message(&jrd,&jd, &srd);
-        //må fikse tidsforsinkelse for ADC. Heller bruke en interrupt enn delay
         pwm_driver(jrd.X_value);
         position_reference=srd.right_slider_value;
         solenoid_control(jrd.button_pressed);

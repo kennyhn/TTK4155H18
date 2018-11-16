@@ -7,34 +7,43 @@
 #include <util/delay.h>
 
 
-void menu_driver(joystick_direction* dir, menu_element** menu_choice,volatile uint8_t* adc){
-    joystick_direction prev_dir = *dir;
-    *dir = check_joystick_direction(adc);
-    if (prev_dir == NEUTRAL){
-      if (*dir == UP && (*menu_choice)->up!=NULL){
-          *menu_choice=(*menu_choice)->up;
-      }
-      else if (*dir == DOWN && (*menu_choice)->down!=NULL){
-          *menu_choice=(*menu_choice)->down;
-      }
-      else if(*dir == RIGHT && (*menu_choice)->choose!=NULL){
-          *menu_choice=(*menu_choice)->choose;
-          if ((*menu_choice)->name == "Game"){
-            highscore = play_game();
-            printf("%d", highscore);
-            save_high_score(highscore);
-            *menu_choice=(*menu_choice)->choose; //score
-          }
-          print_page(*menu_choice);
-      }
-      else if(*dir==LEFT && (*menu_choice)->back!=NULL){
-          *menu_choice=(*menu_choice)->back;
-          print_page(*menu_choice);
-      }
-      if ((*menu_choice)->name != "Score" && (*menu_choice)->name != "Highscore table"){
-        print_marker((*menu_choice)->line);
-      }
+void menu_driver(uint8_t* K_p,uint8_t* K_i,joystick_direction* dir, menu_element** menu_choice,volatile uint8_t* adc){
+  joystick_direction prev_dir = *dir;
+  *dir = check_joystick_direction(adc);
+  if (prev_dir == NEUTRAL){
+    if (*dir == UP && (*menu_choice)->up!=NULL){
+        *menu_choice=(*menu_choice)->up;
     }
+    else if (*dir == DOWN && (*menu_choice)->down!=NULL){
+        *menu_choice=(*menu_choice)->down;
+    }
+    else if(*dir == RIGHT && (*menu_choice)->choose!=NULL){
+        *menu_choice=(*menu_choice)->choose;
+        if ((*menu_choice)->name == "Game"){
+          highscore = play_game(*K_p, *K_i);
+          save_high_score(highscore);
+          *menu_choice=(*menu_choice)->choose; //score
+        }
+        print_page(*menu_choice);
+    }
+    else if(*dir==LEFT && (*menu_choice)->back!=NULL){
+        *menu_choice=(*menu_choice)->back;
+        print_page(*menu_choice);
+    }
+
+    //when to print marker
+    if ((*menu_choice)->name != "Score" && (*menu_choice)->name != "Highscore table"){
+      print_marker((*menu_choice)->line);
+    }
+    if ((*menu_choice)->name == "Easy"){
+      *K_p = 1;
+      *K_i = 1;
+    }
+    else if ((*menu_choice)->name == "Hard"){
+      *K_p = 4;
+      *K_i = 4;
+    }
+  }
 }
 
 menu_element* create_menu_element(char* name,uint8_t line, menu_element* up, menu_element* down, menu_element* choose, menu_element* back){
@@ -53,15 +62,7 @@ menu_element* create_menu_element(char* name,uint8_t line, menu_element* up, men
 void print_page(menu_element* node){
   SRAM_OLED_reset();
   if (node->name == "Score"){
-    SRAM_oled_print8(0,0,"Score");
-    //SRAM_oled_print8(5,3, highscore); need to convert uint8_t to char*
-    if (highscore > 20){
-      SRAM_oled_print8(5,4, "Nice!");
-    }
-    else{
-        SRAM_oled_print8(5,4, "Hopeless!");
-    }
-    SRAM_writes_to_screen();
+    print_score();
   }
   else if (node->name == "Highscore table"){
     print_high_score();
@@ -101,19 +102,44 @@ void print_marker(uint8_t line){
   SRAM_writes_to_screen();
 }
 
+void print_score(){
+  SRAM_oled_print8(0,0,"Score");
+  //SRAM_oled_print8(5,3, highscore); need to convert uint8_t to char*
+  char gamescore[4];
+  snprintf(gamescore,4,"%d",highscore);
+  SRAM_oled_print8(3,60,gamescore);
+
+  if(highscore>40){
+    SRAM_oled_print8(7,0,"You're a nerd!");
+  }
+  else if (highscore>20){
+    SRAM_oled_print8(7,0, "You're average!");
+  }
+  else{
+      SRAM_oled_print8(7,0, "You're trash!");
+  }
+  SRAM_writes_to_screen();
+}
+
+
 menu_element* create_menu(){ //return first element in menu
   menu_element* play_game = create_menu_element("Play game",0, NULL, NULL, NULL,NULL);
   menu_element* highscore = create_menu_element("Highscore", 1,play_game, NULL, NULL, NULL);
   menu_element* highscore_table = create_menu_element("Highscore table", 0, NULL, NULL, NULL, highscore);
   menu_element* score = create_menu_element("Score", 0, NULL, NULL, highscore_table, NULL);
   menu_element* game = create_menu_element("Game",0, NULL, NULL, score,NULL);
+
+  menu_element* easy = create_menu_element("Easy",0, NULL, NULL, game,play_game);
+  menu_element* hard = create_menu_element("Hard",1, easy, NULL, game,play_game);
+
   menu_element* credits = create_menu_element("Credits", 2,highscore, NULL, NULL, NULL);
   menu_element* iver = create_menu_element("Iver", 0,NULL, NULL, NULL, credits);
   menu_element* kenny = create_menu_element("Kenny", 1,iver, NULL, NULL, credits);
   menu_element* jorgen = create_menu_element("Jorgen", 2,kenny, NULL, NULL, credits);
 
   play_game->down=highscore;
-  play_game->choose=game;
+  play_game->choose=easy;
+  easy->down = hard;
   highscore->choose = highscore_table;
   highscore->down = credits;
   credits->choose = iver;

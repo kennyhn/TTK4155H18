@@ -75,38 +75,3 @@ uint8_t SRAM_read_oled_data(uint8_t page, uint8_t column){
     volatile char *ext_ram= (char *) 0x1BFF; //start address for the screen in SRAM
     return ext_ram[page*128+column];
 }
-
-
-/*void LATCH_test(void){
-    DDRE = 0x02; //For å sette dde1, som er latch enable
-    DDRA =  0xFF; //Port A data register - må sette alle til 1 for write-modus
-    PORTE = 0x00;
-    PORTA = 0xBF;
-    //PORTA = 0x00;
-    _delay_ms(1000);
-    PORTE = 0x2;
-    _delay_ms(1000);
-    PORTE = 0x00;
-    PORTA = 0x00;
-
-*/
-
-
-
-    /*while(1){
-        PORTA = 1;
-        _delay_ms(2);
-        PORTA = 0;
-        _delay_ms(2);
-
-    }
-}*/
-
-void GAL_test(void){
-    DDRC |= (0b111<<DDC1); //Setter DDC1-3 til write-modus
-    PORTC &= ~(1<<PORTC3);
-    PORTC |= (1<<PORTC2);
-    DDRD |= (1 << DDD7);
-    PORTD &= ~(1<<PORTD7);
-
-}
