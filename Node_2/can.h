@@ -22,7 +22,7 @@ void receive_console_message(joystick_raw_data* jrd, joystick_direction* jd, sli
 //void can_error();
 uint8_t can_int_vect();
 //int can_transmit_complete();
-void interrupt_pcint6_init();
+void can_interrupt_init();
 
 
 

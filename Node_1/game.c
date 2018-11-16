@@ -24,17 +24,15 @@ uint8_t play_game(void){
   uint8_t x3 = 56;
   uint8_t y3 = 56;
   uint8_t r3 = 6;
-  uint8_t high_score;
+  highscore = 0;
   while(1){
 
     //Dette gjøres for å ikke få uforventet brudd pga game-over verdien blir liggende igjen.
     if (can_message_received){
 
       can_message_received = 0;
-      can_message rmsg = can_data_receive();
+      can_data_receive();
       printf("melding mottatt\n");
-      high_score = rmsg.data[0];
-      printf("Highscore play game: %d\n",high_score);
       _delay_ms(600); //this might possibly need to be bigger or smaller
       if (can_message_received){
         printf("reset flag \n");
@@ -42,7 +40,7 @@ uint8_t play_game(void){
         can_data_receive();
       }
       printf("Everything's good\n");
-      return high_score;
+      return highscore;
     }
     SRAM_OLED_reset();
 
@@ -117,10 +115,10 @@ void print_high_score(void){
   draw_line(0,127,10,10);
 
   for (int i = 0; i<HIGH_SCORE_LENGTH; i++){
-    char highscore[4];
+    char highscore_array[4];
     char placement = '1'+i;
     uint8_t highscore_value = (uint8_t)ext_ram[i];
-    snprintf(highscore,4,"%d",highscore_value);
+    snprintf(highscore_array,4,"%d",highscore_value);
 
     /******************Create the C-string**************/
     char print_to_screen[7];
@@ -128,7 +126,7 @@ void print_high_score(void){
     print_to_screen[1]='.';
     print_to_screen[2]=' ';
     for (int j=0;j<3;j++){
-      print_to_screen[j+3]=highscore[j];
+      print_to_screen[j+3]=highscore_array[j];
     }
     print_to_screen[6]='\0';
     /**************Create the C-string****************/

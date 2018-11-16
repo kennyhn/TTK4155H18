@@ -1,15 +1,13 @@
+#define F_CPU 16000000
+#define PRESCALER 8
 #include "pwm.h"
-#include <avr/io.h>
 #include "../Node_1/adc.h"
 #include "can.h"
 #include "motor.h"
-#define F_CPU 16000000
-#define PRESCALER 8
+#include <avr/io.h>
 
-//need to find top value for it to be 20 ms:
-//N=F_CPU/(f_osc*(1+TOP))
-//f_osc is the frequency when the duty cycle is 20 ms which becomes 50 hz.
-//This gives us the TOP value to be 39999
+
+
 
 void pwm_init(void){
 
@@ -24,10 +22,8 @@ void pwm_init(void){
   //WGM sets operation mode
   //CS selects internal clock source
 
-  //må sette OCR for å velge duty cyclen
-  //OCR1A = 1999;
+  //N=F_CPU/(f_osc*(1+TOP))
   ICR1 = 39999;
-
 }
 
 void timer_interrupt_init(){
@@ -39,7 +35,6 @@ void timer_interrupt_init(){
 }
 
 ISR(TIMER1_OVF_vect){
-  high_score++;
   static int counter = 0;
 
   if (counter%5 == 0){
@@ -68,7 +63,6 @@ void pwm_driver(double x_value_raw){
   double placement = x_value_raw/255.0+1;
   if (placement>=1 && placement<=2){
     int number = placement*0.001*F_CPU/PRESCALER;
-    //printf("number should be between 2000 and 4000: %d\n",number);
     OCR1A=number;
   }
   else{
@@ -77,14 +71,12 @@ void pwm_driver(double x_value_raw){
 }
 
 void solenoid_control(uint8_t jrd_button_pressed){
-  //TBD: Finne ut hvordan vi kan styre spenningen/verdien ut av en port
-
   DDRB |= (1<<PB4);//Setter port C pinne 3 til write
 
   if(jrd_button_pressed){
-    PORTB |= (1<<PB4);
+    PORTB |= (1<<PB4); //setter porten høy
   }
   else{
-    PORTB &= ~(1<<PB4);
+    PORTB &= ~(1<<PB4); //setter porten lavs
   }
 }

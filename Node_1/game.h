@@ -4,6 +4,7 @@
 #define F_CPU 4915200
 
 #include <stdint.h>
+volatile uint8_t highscore;
 
 
 uint8_t play_game(void);

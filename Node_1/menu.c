@@ -6,7 +6,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-volatile uint8_t high_score = 0;
 
 void menu_driver(joystick_direction* dir, menu_element** menu_choice,volatile uint8_t* adc){
     joystick_direction prev_dir = *dir;
@@ -21,9 +20,9 @@ void menu_driver(joystick_direction* dir, menu_element** menu_choice,volatile ui
       else if(*dir == RIGHT && (*menu_choice)->choose!=NULL){
           *menu_choice=(*menu_choice)->choose;
           if ((*menu_choice)->name == "Game"){
-            high_score = play_game();
-            printf("%d", high_score);
-            save_high_score(high_score);
+            highscore = play_game();
+            printf("%d", highscore);
+            save_high_score(highscore);
             *menu_choice=(*menu_choice)->choose; //score
           }
           print_page(*menu_choice);
@@ -56,7 +55,7 @@ void print_page(menu_element* node){
   if (node->name == "Score"){
     SRAM_oled_print8(0,0,"Score");
     //SRAM_oled_print8(5,3, highscore); need to convert uint8_t to char*
-    if (high_score > 20){
+    if (highscore > 20){
       SRAM_oled_print8(5,4, "Nice!");
     }
     else{
@@ -108,18 +107,18 @@ menu_element* create_menu(){ //return first element in menu
   menu_element* highscore_table = create_menu_element("Highscore table", 0, NULL, NULL, NULL, highscore);
   menu_element* score = create_menu_element("Score", 0, NULL, NULL, highscore_table, NULL);
   menu_element* game = create_menu_element("Game",0, NULL, NULL, score,NULL);
-  menu_element* test1 = create_menu_element("Test1", 2,highscore, NULL, NULL, NULL);
-  menu_element* test2 = create_menu_element("Test2", 0,NULL, NULL, NULL, test1);
-  menu_element* test3 = create_menu_element("Test3", 1,test2, NULL, NULL, test1);
-  menu_element* test4 = create_menu_element("Test4", 0,NULL, NULL, NULL, test3);
+  menu_element* credits = create_menu_element("Credits", 2,highscore, NULL, NULL, NULL);
+  menu_element* iver = create_menu_element("Iver", 0,NULL, NULL, NULL, credits);
+  menu_element* kenny = create_menu_element("Kenny", 1,iver, NULL, NULL, credits);
+  menu_element* jorgen = create_menu_element("Jorgen", 2,kenny, NULL, NULL, credits);
 
   play_game->down=highscore;
   play_game->choose=game;
   highscore->choose = highscore_table;
-  highscore->down = test1;
-  test1->choose = test2;
-  test2->down = test3;
-  test3->choose = test4;
+  highscore->down = credits;
+  credits->choose = iver;
+  iver->down = kenny;
+  kenny->down = jorgen;
   print_page(play_game);
   print_marker(play_game->line);
   return play_game;

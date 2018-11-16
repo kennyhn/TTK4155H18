@@ -1,4 +1,5 @@
 #include "timer.h"
+#include "game.h"
 #include "uart.h"
 #include "can.h"
 #include "adc.h"
@@ -32,9 +33,6 @@ void timer_interrupt_init(void){
 
 ISR(TIMER0_COMP_vect){
   static int counter = 0;
-  //printf("counter %d\n", counter);
-  /*Sets different clock frequency*/
-  //printf("counter %d\n", counter);
 
   //Flag is set every 50ms
   if ((counter%3)==0){
@@ -46,8 +44,8 @@ ISR(TIMER0_COMP_vect){
   }
 
   //flag is set every second
-  if ((counter%600) == 0){
-    //high_score++;
+  if ((counter%60) == 0){
+    highscore++;
   }
   //printf("counter %d\n", counter);
   //if (counter == 255)counter=0; //To prevent overflow of coutner

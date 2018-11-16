@@ -1,9 +1,7 @@
-#define F_CPU 4915200
-#include <util/delay.h>
-
 #include "game.h"
 #include "adc_arduino.h"
 #include "uart.h"
+#include <util/delay.h>
 
 
 

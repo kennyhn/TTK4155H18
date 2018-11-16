@@ -39,9 +39,8 @@ int16_t transform_encoder_to_position(int16_t encoder_data){
 }
 
 void set_motor_start_point(){
-  volatile int32_t temp_highscore = high_score;
   motor_driver(-70);
-  while ((high_score-temp_highscore) < 150);//wait for 1 seconds
+  _delay_ms(3000); //3 sec delay for start up routine
   motor_driver(0);
   motor_set = 1;
   reset_encoder(); //set ecoder start point

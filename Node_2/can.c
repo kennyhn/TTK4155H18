@@ -1,5 +1,3 @@
-//Notater: i node 2 er det en can-controller slave select - den er PB7 (output), men du må også sette PB0 som output
-//Normal mode for å kommunisere mellom node 1 og 2, du må stille på noen andre registre i CAN-init, CNF1 - 03, CNF2 - 9a, CNF3 - 07
 #include "can.h"
 #include "mcp2515.h"
 #include "spi.h"
@@ -104,7 +102,7 @@ int can_transmit_complete(uint8_t buffer){
 }
 */
 
-void interrupt_pcint6_init(void){
+void can_interrupt_init(void){
   //  Set pin to input
   DDRB &= ~(1<<PB6);
   // Disable global interrupts
