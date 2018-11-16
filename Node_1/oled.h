@@ -2,7 +2,6 @@
 #define OLED_H_
 #include <stdint.h>
 
-
 void write_c(char data);
 void oled_reset(void);
 void oled_init();

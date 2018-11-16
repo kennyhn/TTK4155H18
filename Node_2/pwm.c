@@ -29,6 +29,10 @@ void timer_interrupt_init(){
   sei(); //Enable global interrupts
 
   can_allowed_to_send_flag = 0;
+  K_p = 1;
+  K_i = 1;
+  motor_set = 0;
+  position_reference=0;
 }
 
 ISR(TIMER1_OVF_vect){

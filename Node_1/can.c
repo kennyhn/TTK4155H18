@@ -94,22 +94,22 @@ can_message can_data_receive(void){
 void send_console_message(uint8_t K_p,uint8_t K_i){
   //send joystick direction
   volatile uint8_t* adc = (uint8_t*)0x1400;
-  joystick_direction jd = check_joystick_direction(adc);
+  joystick_direction joystick_dir = check_joystick_direction(adc);
   /*using raw data for greater resolution*/
-  joystick_raw_data jrd;
-  slider_raw_data srd;
+  joystick_raw_data joystick_data;
+  slider_raw_data slider;
   joystick_x_axis(adc);
-  jrd.X_value = *adc;
+  joystick_data.X_value = *adc;
   r_slider(adc);
-  srd.right_slider_value = *adc;
-  jrd.button_pressed = (PINB & (1<<PB2));
+  slider.right_slider_value = *adc;
+  joystick_data.button_pressed = (PINB & (1<<PB2));
 
   can_message msg;
   msg.id = 10;
   msg.length = 5;
-  msg.data[0]=jrd.X_value;
-  msg.data[1]=jrd.button_pressed;
-  msg.data[2]=srd.right_slider_value;
+  msg.data[0]=joystick_data.X_value;
+  msg.data[1]=joystick_data.button_pressed;
+  msg.data[2]=slider.right_slider_value;
   msg.data[3]=K_p;
   msg.data[4]=K_i;
   //printf("K_p %d\nK_i %d\n",msg.data[3],K_i);

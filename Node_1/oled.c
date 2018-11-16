@@ -177,7 +177,6 @@ void draw_circle(uint8_t x0, uint8_t y0, uint8_t r){
         x = -sqrt(pow(r,2)-pow((y-y0),2)) + x0;
         print_pixel(x,y);
     }
-    SRAM_writes_to_screen();
 }
 
 void draw_line(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2){
@@ -194,7 +193,6 @@ void draw_line(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2){
             print_pixel(x,y);
         }
     }
-    SRAM_writes_to_screen();
 }
 
 void print_pixel(uint8_t x, uint8_t y){
@@ -236,7 +234,6 @@ void draw_half_circle(uint8_t x0, uint8_t y0, uint8_t r, int dir){
         print_pixel(x,y);
     }
     }
-    SRAM_writes_to_screen();
 }
 
 

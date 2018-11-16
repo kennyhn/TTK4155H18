@@ -5,6 +5,4 @@
 
 
 void timer_interrupt_init(void);
-
-
 #endif

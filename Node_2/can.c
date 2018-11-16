@@ -73,7 +73,6 @@ can_message can_data_receive(void){
       message.data[i] = mcp2515_read(MCP_RXB0D0+i);
     }
     mcp2515_write(MCP_CANINTF, mcp2515_read_status() & 0xFE); //clear interrupt flag
-    //printf("%c\n",message.data[0]);
     return message;
   }
   message.id = 0;
@@ -81,26 +80,20 @@ can_message can_data_receive(void){
 }
 
 
-void receive_console_message(joystick_raw_data* jrd, joystick_direction* jd, slider_raw_data* srd ){
-  can_message rmsg;
-  rmsg=can_data_receive();
-  jrd->X_value=rmsg.data[0];
-  jrd->button_pressed=rmsg.data[1];
-  srd->right_slider_value=rmsg.data[2];
-  K_p = rmsg.data[3];
-  K_i = rmsg.data[4];
-  printf("K_p: %d \nK_i: %d\n",K_p,K_i);
+void receive_console_message(joystick_raw_data* joystick_data, joystick_direction* joystick_dir, slider_raw_data* slider ){
+  can_message console_message;
+  console_message=can_data_receive();
+  joystick_data->X_value=console_message.data[0];
+  joystick_data->button_pressed=console_message.data[1];
+  slider->right_slider_value=console_message.data[2];
+  K_p = console_message.data[3];
+  K_i = console_message.data[4];
 }
 
 //Check if there is an interrupt in CAN-controller
 uint8_t can_int_vect(){
   return mcp2515_read(MCP_CANINTF);
 }
-/*
-int can_transmit_complete(uint8_t buffer){
-  return ;//return 1 when the transmit is complete
-}
-*/
 
 void can_interrupt_init(void){
   //  Set pin to input
@@ -114,6 +107,8 @@ void can_interrupt_init(void){
 
   //Enable global interrupts
   sei();
+
+  can_message_received = 0;
 }
 
 ISR(PCINT0_vect){

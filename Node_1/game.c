@@ -9,21 +9,6 @@
 #define HIGH_SCORE_LENGTH 3 //CONSTANT
 
 uint8_t play_game(uint8_t K_p,uint8_t K_i){
-  uint8_t x0 = 8;
-  uint8_t y0 = 8;
-  uint8_t r0 = 8;
-
-  uint8_t x1 = 24;
-  uint8_t y1 = 24;
-  uint8_t r1 = 6;
-
-  uint8_t x2 = 40;
-  uint8_t y2 = 40;
-  uint8_t r2 = 6;
-
-  uint8_t x3 = 56;
-  uint8_t y3 = 56;
-  uint8_t r3 = 6;
   highscore = 0;
   while(1){
     if (can_message_received){
@@ -36,32 +21,8 @@ uint8_t play_game(uint8_t K_p,uint8_t K_i){
       }
       return highscore;
     }
-    SRAM_OLED_reset();
-
-    draw_circle(x0,y0,r0);
-    draw_line(x0-2,x0+2, y0+2, y0+2);
-    draw_line(x0+1,x0+2, y0-2,y0-2);
-    draw_line(x0-2,x0-1, y0-2,y0-2);
-    draw_circle(x1,y1,r1);
-    draw_circle(x2,y2,r2);
-    draw_circle(x3,y3,r3);
     send_console_message(K_p,K_i);
-    x0+=3;
-    x1+=3;
-    x2+=3;
-    x3+=3;
-    if (x0 >= 120){
-      x0 = 8;
-    }
-    if (x1 >= 120){
-      x1 = 8;
-    }
-    if (x2 >= 120){
-      x2 = 8;
-    }
-    if (x3 >= 120){
-      x3 = 8;
-    }
+    print_game_screen();
   }
   return 0;
 }
@@ -79,7 +40,6 @@ void save_high_score(uint8_t value){
   /*using address space 0x1800 to 0x1809*/
   uint8_t temp_high_score[HIGH_SCORE_LENGTH];
   uint8_t is_value_added = 0;
-  //uint8_t temp;
   for (int i = 0; i<HIGH_SCORE_LENGTH; i++) {
     if((uint8_t)ext_ram[i]>=value || is_value_added){
       if (!is_value_added){
@@ -90,9 +50,7 @@ void save_high_score(uint8_t value){
       }
     }
     else if ((uint8_t)ext_ram[i]<value && !is_value_added){
-        //temp = ext_mem[i];
         temp_high_score[i]=value; //when the value is higher than the other high scores it is added
-        //value = temp;
         is_value_added=1;
     }
   }
@@ -128,4 +86,53 @@ void print_high_score(void){
     SRAM_oled_print5(2+i,0,print_to_screen);
   }
   SRAM_writes_to_screen();
+}
+
+void print_game_screen(void){
+  static uint8_t x1 = 24;
+  uint8_t y1 = 24;
+  uint8_t r1 = 6;
+
+  static uint8_t x2 = 40;
+  uint8_t y2 = 40;
+  uint8_t r2 = 6;
+
+  static uint8_t x3 = 56;
+  uint8_t y3 = 56;
+  uint8_t r3 = 6;
+  static int8_t k0 = 3;
+  static int8_t k1 = 3;
+  static int8_t k2 = 3;
+  static int8_t k3 = 3;
+
+  SRAM_OLED_reset();
+  char current_game_score[4];
+  snprintf(current_game_score,4,"%d",highscore);
+  SRAM_oled_print5(0,112,current_game_score);
+  SRAM_oled_print8(0,0,"Current score:");
+  draw_smiley(x1,y1,r1);
+  draw_smiley(x2,y2,r2);
+  draw_smiley(x3,y3,r3);
+  SRAM_writes_to_screen();
+  x1+=k1;
+  x2+=k2;
+  x3+=k3;
+  if (x1 >= 120){
+    k1=-3;
+  }
+  else if (x1<8){
+    k1=3;
+  }
+  if (x2 >= 120){
+    k2=-3;
+  }
+  else if (x2<=8){
+    k2=3;
+  }
+  if (x3 >= 120){
+    k3=-3;
+  }
+  else if (x3<=8){
+    k3=3;
+  }
 }
