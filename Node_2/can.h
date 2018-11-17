@@ -1,7 +1,6 @@
 /**@file can.h
  * @brief Functions running and operating this can node.
  */
-
 #ifndef CAN_H_
 #define CAN_H_
 #include <avr/io.h>
@@ -30,25 +29,25 @@ int can_loopback_init();
 int can_normal_init();
 
 /**@brief Transmit the can message @param msg.
- * 
+ *
  * @param msg Message that is being sent.
  */
 void can_message_send(can_message* msg);
 
 /**@brief Receives a can message and clears interrupt flag.
- * 
+ *
  * @return can_message The can message received.
  */
 can_message can_data_receive(void);
 
 /**@brief Receives the can message and splits it up to usable formats.
- * 
+ *
  * The values are returned through the parameter pointers.
  */
 void receive_console_message(joystick_raw_data* jrd, joystick_direction* jd, slider_raw_data* srd);
 
 /**@brief Functu\ion that returns all the can interrupt flags.
- * 
+ *
  * @return uint8_t the 8 different interupt flags.
  */
 uint8_t can_int_vect();

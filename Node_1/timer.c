@@ -32,13 +32,13 @@ ISR(TIMER0_COMP_vect){
     can_allowed_to_send_flag = 1;
   }
   //flag is set every 100 ms
-  if ((counter%6)==0){
+  if ((counter%6)==0){ //10 Hz
+    timer_flag=1;
   }
 
   //flag is set every second
   if ((counter%60) == 0){
     highscore++;
-    timer_flag=1;
   }
   counter++;
 }

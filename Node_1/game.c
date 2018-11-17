@@ -77,8 +77,8 @@ user_score create_user(uint8_t score_value){
   //Receive data from putty if user hasn't reached maximum letters or used ENTER
   while (user_input!='.' && counter!=MAX_NAME_LENGTH){
     user_input=USART_Receive(NULL);
-    USART_Transmit(user_input,NULL);
     if (user_input!='.'){
+      USART_Transmit(user_input,NULL);
       user_data.user_name[counter] = user_input;
       counter++;
     }
@@ -90,6 +90,7 @@ user_score create_user(uint8_t score_value){
 void save_high_score(uint8_t value){
   user_score temp_high_score[HIGH_SCORE_LENGTH];
   uint8_t is_value_added = 0;
+  user_score user_created=create_user(value);
   for (int i = 0; i<HIGH_SCORE_LENGTH; i++){
     if (is_value_added){
       temp_high_score[i]=load_user_data_from_SRAM(i-1);
@@ -98,7 +99,7 @@ void save_high_score(uint8_t value){
       if (user_from_SRAM.score>=value){
         temp_high_score[i]=user_from_SRAM;
       } else {
-        temp_high_score[i]=create_user(value);
+        temp_high_score[i]=user_created;
         is_value_added=1; //sets flag to say if the new value is added
       }
     }
@@ -166,34 +167,6 @@ void print_high_score(void){
 
 }
 
-/*
-void print_high_score(void){
-  volatile char* ext_ram = (char *) 0x1800; //Start address of SRAM
-  SRAM_oled_print8(0,0,"High score");
-  draw_line(0,127,10,10);
-
-  for (int i = 0; i<HIGH_SCORE_LENGTH; i++){
-    char highscore_array[4];
-    char placement = '1'+i;
-    uint8_t highscore_value = (uint8_t)ext_ram[i];
-    snprintf(highscore_array,4,"%d",highscore_value);
-
-    char print_to_screen[7];
-    print_to_screen[0]=placement;
-    print_to_screen[1]='.';
-    print_to_screen[2]=' ';
-    for (int j=0;j<3;j++){
-      print_to_screen[j+3]=highscore_array[j];
-    }
-    print_to_screen[6]='\0';
-
-
-
-    SRAM_oled_print5(2+i,0,print_to_screen);
-  }
-  SRAM_writes_to_screen();
-}
-*/
 
 void print_game_screen(void){
   static uint8_t x1 = 24;

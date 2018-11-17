@@ -10,6 +10,7 @@
 
 void menu_driver(uint8_t* K_p,uint8_t* K_i,joystick_direction* dir, menu_element** menu_choice,volatile uint8_t* adc){
   joystick_direction prev_dir = *dir;
+
   *dir = check_joystick_direction(adc);
   if (prev_dir == NEUTRAL){
     if (*dir == UP && (*menu_choice)->up!=NULL){
@@ -23,6 +24,8 @@ void menu_driver(uint8_t* K_p,uint8_t* K_i,joystick_direction* dir, menu_element
         if ((*menu_choice)->name == "Game"){
           play_game(*K_p, *K_i);
           *menu_choice=(*menu_choice)->choose; //score
+          print_page(*menu_choice);
+          *menu_choice=(*menu_choice)->choose; //highscore_table
         }
         print_page(*menu_choice);
     }
