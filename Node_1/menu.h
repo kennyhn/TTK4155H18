@@ -1,5 +1,5 @@
 /**@file menu.h
- * @breif Functions for running the menu
+ * @brief Functions for running the menu
  *
  * This contains the menu element and the functions needed to make the
  * menu and navitgate through it

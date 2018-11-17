@@ -45,6 +45,4 @@ void USART_test(){
         //unsigned char k = USART_Receive();
         _delay_ms(2);
     }
-
-
 }
