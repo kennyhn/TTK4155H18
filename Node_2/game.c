@@ -9,7 +9,7 @@
 
 int8_t check_game_over(void){
   uint16_t data = adc_read();
-  if (data < 20){
+  if (data < 50){
     adc_read();
     return 1;
   }

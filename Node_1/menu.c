@@ -3,6 +3,7 @@
 #include "sram.h"
 #include "game.h"
 #include "can.h"
+#include "uart.h"
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -102,24 +103,7 @@ void print_marker(uint8_t line){
   SRAM_writes_to_screen();
 }
 
-void print_score(){
-  SRAM_oled_print8(0,0,"Score");
-  //SRAM_oled_print8(5,3, highscore); need to convert uint8_t to char*
-  char gamescore[4];
-  snprintf(gamescore,4,"%d",highscore);
-  SRAM_oled_print8(3,60,gamescore);
 
-  if(highscore>40){
-    SRAM_oled_print8(7,0,"You're a nerd!");
-  }
-  else if (highscore>20){
-    SRAM_oled_print8(7,0, "You're average!");
-  }
-  else{
-      SRAM_oled_print8(7,0, "You're trash!");
-  }
-  SRAM_writes_to_screen();
-}
 
 
 menu_element* create_menu(){ //return first element in menu

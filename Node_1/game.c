@@ -60,6 +60,38 @@ void save_high_score(uint8_t value){
 
 }
 
+void print_score(void){
+  SRAM_oled_print8(0,0,"Score");
+  //SRAM_oled_print8(5,3, highscore); need to convert uint8_t to char*
+  char gamescore[4];
+  snprintf(gamescore,4,"%d",highscore);
+  SRAM_oled_print8(3,60,gamescore);
+  SRAM_oled_print5(5,0,"Skriv inn navn i putty: ");
+
+  if(highscore>40){
+    SRAM_oled_print8(7,0,"You're a nerd!");
+  }
+  else if (highscore>20){
+    SRAM_oled_print8(7,0, "You're average!");
+  }
+  else{
+      SRAM_oled_print8(7,0, "You're trash!");
+  }
+  SRAM_writes_to_screen();
+  printf("Tast inn navn:(Enter for ferdig) ");
+  char user_input=0;
+  char user_name[10];
+  int counter = 0;
+  while (user_input!='\n' || counter!=9){
+    user_input = USART_Receive(NULL);
+    USART_Transmit(user_input,NULL);
+    user_name[counter]=user_input;
+    counter++;
+  }
+  user_name[counter]='\0';
+
+}
+
 void print_high_score(void){
   volatile char* ext_ram = (char *) 0x1800; //Start address of SRAM
   SRAM_oled_print8(0,0,"High score");

@@ -4,8 +4,6 @@
 #include "adc.h"
 #include <avr/interrupt.h>
 
-
-
 void joystick_y_axis(volatile uint8_t *adc){
   _delay_us(1);
   *adc = 0x04;
@@ -19,6 +17,7 @@ void joystick_x_axis(volatile uint8_t *adc){
   while(!adc_is_ready_flag);
   adc_is_ready_flag=0;
 }
+
 
 // L-slider midten nede
 //l-button er midten oppe

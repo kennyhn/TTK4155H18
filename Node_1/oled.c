@@ -26,7 +26,6 @@ void oled_reset(void){
             *oled_data = 0x00;
         }
     }
-
 }
 
 void oled_init(){
