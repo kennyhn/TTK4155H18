@@ -21,8 +21,7 @@ void menu_driver(uint8_t* K_p,uint8_t* K_i,joystick_direction* dir, menu_element
     else if(*dir == RIGHT && (*menu_choice)->choose!=NULL){
         *menu_choice=(*menu_choice)->choose;
         if ((*menu_choice)->name == "Game"){
-          highscore = play_game(*K_p, *K_i);
-          save_high_score(highscore);
+          play_game(*K_p, *K_i);
           *menu_choice=(*menu_choice)->choose; //score
         }
         print_page(*menu_choice);

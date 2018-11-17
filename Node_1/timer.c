@@ -20,6 +20,7 @@ void timer_interrupt_init(void){
   //TCNT0 = 0;
   sei();
   can_allowed_to_send_flag=0;
+  timer_flag=0;
 }
 
 
@@ -37,6 +38,7 @@ ISR(TIMER0_COMP_vect){
   //flag is set every second
   if ((counter%60) == 0){
     highscore++;
+    timer_flag=1;
   }
   counter++;
 }

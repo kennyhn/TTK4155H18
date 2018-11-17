@@ -2,6 +2,7 @@
 #include <util/delay.h>
 #include <avr/io.h>
 #include "adc.h"
+#include "timer.h"
 #include <avr/interrupt.h>
 
 void joystick_y_axis(volatile uint8_t *adc){
