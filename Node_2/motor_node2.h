@@ -1,8 +1,8 @@
-/**@file motor.h
+/**@file motor_node2.h
  * @brief Functions controlling the motor and the encoder.
  */
-#ifndef MOTOR_H_
-#define MOTOR_H_
+#ifndef MOTOR_NODE2_H_
+#define MOTOR_NODE2_H_
 #include "../Node_1/adc.h"
 
 uint8_t motor_set;

@@ -1,4 +1,4 @@
-#include "spi.h"
+#include "spi_node2.h"
 
 void SPI_master_init(void){
   /* Set MOSI and SCK output and slave select to output, all others input */

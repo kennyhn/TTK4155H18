@@ -1,4 +1,4 @@
-#include "adc_arduino.h"
+#include "adc_node2.h"
 
 void adc_init(void){
   //Using channel 0 (Clear MUX0 - MUX4 bits)

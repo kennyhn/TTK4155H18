@@ -1,9 +1,9 @@
 #define F_CPU 16000000
 #define PRESCALER 8
-#include "pwm.h"
+#include "pwm_node2.h"
 #include "../Node_1/adc.h"
-#include "can.h"
-#include "motor.h"
+#include "can_node2.h"
+#include "motor_node2.h"
 #include <avr/io.h>
 
 void pwm_init(void){

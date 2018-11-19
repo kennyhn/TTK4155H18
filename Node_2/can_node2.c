@@ -1,7 +1,7 @@
-#include "can.h"
-#include "mcp2515.h"
-#include "spi.h"
-#include "pwm.h"
+#include "can_node2.h"
+#include "mcp2515_node2.h"
+#include "spi_node2.h"
+#include "pwm_node2.h"
 
 int can_loopback_init(){
   mcp2515_init(); //setup mcp

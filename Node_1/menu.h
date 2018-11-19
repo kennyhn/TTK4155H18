@@ -8,7 +8,6 @@
 #ifndef MENU_H_
 #define MENU_H_
 
-#include <stdint.h>
 #include "adc.h"
 
 typedef struct Menu_element{

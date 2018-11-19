@@ -1,8 +1,8 @@
-/**@file pwm.h
+/**@file pwm_node2.h
  * @brief Functions controlling the timer in Node 2, and the PWM signal.
  */
-#ifndef PWM_H_
-#define PWM_H_
+#ifndef PWM_NODE2_H_
+#define PWM_NODE2_H_
 #include <stdint.h>
 
 volatile int16_t position_reference;

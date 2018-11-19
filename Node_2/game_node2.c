@@ -1,8 +1,8 @@
-#include "game.h"
-#include "adc_arduino.h"
-#include "uart.h"
-#include "pwm.h"
-#include "can.h"
+#include "game_node2.h"
+#include "adc_node2.h"
+#include "uart_node2.h"
+#include "pwm_node2.h"
+#include "can_node2.h"
 #include <util/delay.h>
 
 

@@ -5,37 +5,43 @@
 #include "timer.h"
 #include <avr/interrupt.h>
 
-void joystick_y_axis(volatile uint8_t *adc){
+uint8_t joystick_y_axis(volatile uint8_t *adc){
   _delay_us(1);
   *adc = 0x04;
   while(!adc_is_ready_flag);
   adc_is_ready_flag=0;
+  //printf("Y-axis: %d\n",*adc);
+  return *adc;
 }
 
-void joystick_x_axis(volatile uint8_t *adc){
+uint8_t joystick_x_axis(volatile uint8_t *adc){
   _delay_us(1);
   *adc = 0x05;
   while(!adc_is_ready_flag);
   adc_is_ready_flag=0;
+  printf("X-axis: %d\n",*adc);
+  return *adc;
 }
 
 
 // L-slider midten nede
 //l-button er midten oppe
-void l_slider(volatile uint8_t *adc){
+uint8_t l_slider(volatile uint8_t *adc){
   _delay_us(1);
   *adc = 0x06;
   while(!adc_is_ready_flag);
   adc_is_ready_flag=0;
+  return *adc;
 }
 
 // R-slider oppe til ventre
 //r-button er under r-slider
-void r_slider(volatile uint8_t *adc){
+uint8_t r_slider(volatile uint8_t *adc){
   _delay_us(1);
   *adc = 0x07;
   while(!adc_is_ready_flag);
   adc_is_ready_flag=0;
+  return *adc;
 }
 
 joystick_perc_angle get_perc_angle(volatile uint8_t *adc){

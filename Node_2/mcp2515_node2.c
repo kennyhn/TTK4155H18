@@ -1,5 +1,5 @@
-#include "mcp2515.h"
-#include "spi.h"
+#include "mcp2515_node2.h"
+#include "spi_node2.h"
 #include <avr/io.h>
 
 uint8_t mcp2515_init(){

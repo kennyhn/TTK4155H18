@@ -1,10 +1,9 @@
-/**@file can.h
+/**@file can_node2.h
  * @brief Functions running and operating this can node.
  */
-#ifndef CAN_H_
-#define CAN_H_
+#ifndef CAN_NODE2_H_
+#define CAN_NODE2_H_
 #include <avr/io.h>
-#include <stdint.h>
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 #include "../Node_1/adc.h"

@@ -1,5 +1,6 @@
-
-
+/**@file TWI_Master_node2.h
+ * @brief Functions given in the assignment to use two-wire interface
+ */
 
 //TWI Status/Control register definitions
 #define TWI_BUFFER_SIZE 4   // Set this to the largest message size that will be sent including address byte.

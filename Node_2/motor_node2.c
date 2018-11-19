@@ -1,7 +1,7 @@
-#include "motor.h"
-#include "TWI_Master.h"
-#include "uart.h"
-#include "pwm.h"
+#include "motor_node2.h"
+#include "TWI_Master_node2.h"
+#include "uart_node2.h"
+#include "pwm_node2.h"
 #include <util/delay.h>
 #include <avr/io.h>
 

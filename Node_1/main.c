@@ -36,6 +36,7 @@ int main(){
     menu_element* menu_choice = create_menu(); //creating the menu
     printf("#############\n");
     while(1){
+      //printf("y-axis: %d\n", joystick_y_axis(adc));
       menu_driver(&K_p, &K_i,&dir, &menu_choice,adc); //Updating the menu
     }
     return 0;

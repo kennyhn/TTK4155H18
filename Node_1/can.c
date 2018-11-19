@@ -1,8 +1,7 @@
 #include "can.h"
-#include "mcp2515.h"
 #include "adc.h"
 #include "timer.h"
-
+#include "mcp2515.h"
 
 
 int can_loopback_init(){
@@ -98,10 +97,8 @@ void send_console_message(uint8_t K_p,uint8_t K_i){
   /*using raw data for greater resolution*/
   joystick_raw_data joystick_data;
   slider_raw_data slider;
-  joystick_x_axis(adc);
-  joystick_data.X_value = *adc;
-  r_slider(adc);
-  slider.right_slider_value = *adc;
+  joystick_data.X_value=joystick_x_axis(adc);
+  slider.right_slider_value= r_slider(adc);
   joystick_data.button_pressed = (PINB & (1<<PB2));
 
   can_message msg;
@@ -124,7 +121,7 @@ uint8_t can_int_vect(){
   return mcp2515_read(MCP_CANINTF);
 }
 
-void can_receive_interrupt(void){
+void can_receive_interrupt_init(void){
   //  Set pin to input
   DDRD &= ~(1<<PD2);
   // Disable global interrupts
