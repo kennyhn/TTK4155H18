@@ -1,3 +1,6 @@
+/**@file timer.h
+ * @brief Initializing different timer interrupts and also declare global flags/variables
+ */
 #ifndef TIMER_H_
 #define TIMER_H_
 

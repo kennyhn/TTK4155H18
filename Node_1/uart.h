@@ -1,3 +1,6 @@
+/**@file uart.h
+ * @brief functions for initializing, and using UART communication
+ */
 #ifndef UART_H_
 #define UART_H_
 #include <stdio.h>

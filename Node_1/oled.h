@@ -1,3 +1,7 @@
+/**@file oled.h
+ * @brief Functions for initializing, and do write operations to the OLED screen on the multiboard.
+ * Also has some functions for drawing different shapes on the screen
+ */
 #ifndef OLED_H_
 #define OLED_H_
 #include <stdint.h>

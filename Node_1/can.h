@@ -1,3 +1,6 @@
+/**@file can.h
+ * @brief Functions for initializing, sending and recieving data on CAN-bus
+ */
 #ifndef CAN_H_
 #define CAN_H_
 #include "mcp2515.h"

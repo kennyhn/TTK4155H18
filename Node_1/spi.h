@@ -1,3 +1,6 @@
+/**@file spi.h
+ * @brief Functions for initializing, sending and recieving data on SPI-bus
+ */
 #ifndef SPI_H_
 #define SPI_H_
 

@@ -1,3 +1,6 @@
+/**@file mcp2515.h
+ * @brief Defining register address in addition to functions for operating CAN controller
+ */
 #ifndef MCP2515_H_
 #define MCP2515_H_
 #include <stdint.h>

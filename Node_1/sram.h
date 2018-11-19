@@ -1,3 +1,6 @@
+/**@file sram.h
+ * @brief Functions for doing write and read operations to the SRAM
+ */
 #ifndef SRAM_H_
 #define SRAM_H_
 

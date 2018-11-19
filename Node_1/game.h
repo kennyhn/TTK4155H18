@@ -1,3 +1,6 @@
+/**@file game.h
+ * @brief Functions for game functions including high score
+ */
 #ifndef GAME_H_
 #define GAME_H_
 

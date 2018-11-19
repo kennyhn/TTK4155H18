@@ -1,3 +1,6 @@
+/**@file adc.h
+ * @brief Functions for reading the different controls.
+ */
 #ifndef ADC_H_
 #define ADC_H_
 
@@ -24,8 +27,12 @@ typedef struct Slider_raw_data{
     uint8_t left_slider_value;
 }slider_raw_data;
 
+/**@brief Read the value in y direction of joystick.
+ */
 void joystick_y_axis(volatile uint8_t *adc);
 
+/**@brief Read the value in x direction of joystick.
+ */
 void joystick_x_axis(volatile uint8_t *adc);
 
 void r_slider(volatile uint8_t *adc);
