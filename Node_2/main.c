@@ -13,7 +13,9 @@
 int main(){
   USART_Init(MYUBRR);
   can_interrupt_init();
-
+    
+    
+  //Using cli and sei to call the init functions without interrupt-handling
   cli();
   adc_init();
   can_normal_init();

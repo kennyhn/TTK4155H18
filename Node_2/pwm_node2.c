@@ -19,7 +19,7 @@ void pwm_init(void){
   //WGM sets operation mode
   //CS selects internal clock source
 
-  //N=F_CPU/(f_osc*(1+TOP))
+  //Using the formula N=F_CPU/(f_osc*(1+TOP))
   ICR1 = 39999;
 }
 
@@ -44,17 +44,15 @@ ISR(TIMER1_OVF_vect){
   }
 
   if (motor_set){
-    int16_t reference=position_reference; // kan settes til 128 for testing
+    int16_t reference=position_reference;
     int16_t position=transform_encoder_to_position(read_encoder());
-    //printf("R %d \n", position_reference);
-    //printf("P %d \n", position);
     int16_t e = reference - position;
     total_e += e;
     if (abs(total_e)>1000 || abs(e) < 1){
       total_e = e;
     }
     int16_t u = K_p*e+0.020*K_i*total_e;
-    motor_driver(u); // this is our input
+    motor_driver(u); //Input
   }
     counter++;
 }
@@ -71,12 +69,12 @@ void pwm_driver(double x_value_raw){
 }
 
 void solenoid_control(uint8_t jrd_button_pressed){
-  DDRB |= (1<<PB4);//Setter port C pinne 3 til write
+  DDRB |= (1<<PB4);//Sets the pint to write
 
   if(jrd_button_pressed){
-    PORTB |= (1<<PB4); //setter porten høy
+    PORTB |= (1<<PB4); //Sets the pin high
   }
   else{
-    PORTB &= ~(1<<PB4); //setter porten lavs
+    PORTB &= ~(1<<PB4); //Sets the pin low
   }
 }

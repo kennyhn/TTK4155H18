@@ -20,7 +20,7 @@ void mcp2515_reset(){
 
 uint8_t mcp2515_read(uint8_t address){
   uint8_t result;
-  PORTB &= ~(1<<PB7); //MCP_CS // Select CAN-controller
+  PORTB &= ~(1<<PB7); //MCP_CS - Select CAN-controller
   SPI_master_transmit(MCP_READ); // Send read instruction
   SPI_master_transmit(address); // Send address
   result = SPI_master_receive(); // Read result
@@ -38,11 +38,11 @@ void mcp2515_write(uint8_t address, uint8_t data){
 }
 //
 void mcp2515_request_to_send(uint8_t command){
-  command|=(1<<7); //These two lines are setting 10000xxx
+  command|=(1<<7);
   command&= ~(0xF<<3); //The tree lsb indicate which transmit buffers are enabled to send
   PORTB&=~(1<<PB7); //Select CAN-controller
   SPI_master_transmit(command);
-  PORTB |= (1<<PB7); //deselect CAN-controller?
+  PORTB |= (1<<PB7); //deselect CAN-controller
 
 }
 uint8_t mcp2515_bit_modify(uint8_t address, uint8_t mask, uint8_t data){
@@ -52,14 +52,14 @@ uint8_t mcp2515_bit_modify(uint8_t address, uint8_t mask, uint8_t data){
   SPI_master_transmit(mask);
   SPI_master_transmit(data);
   PORTB|=(1<<PB7); //Deselect can-controller
-  return mcp2515_read(address); //returnerer resultatet fra bitmodifiseringen
+  return mcp2515_read(address); //Return the result from the bit modifying
 }
 
 uint8_t mcp2515_read_status(){
   uint8_t result;
-  PORTB&=~(1<<PB7);
+  PORTB&=~(1<<PB7); //Select can-controller
   SPI_master_transmit(MCP_READ_STATUS);
   result=SPI_master_receive();
-  PORTB|=(1<<PB7);
+  PORTB|=(1<<PB7); //Deselect can-controller
   return result;
 }
