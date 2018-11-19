@@ -8,7 +8,6 @@ uint8_t mcp2515_init(){
   mcp2515_reset(); // Send reset-command
   // Self-test
   uint8_t value=mcp2515_read(MCP_CANSTAT);
-  //printf("0x%x\r\n",value);
   if ((value & MODE_MASK) != MODE_CONFIG) {
     printf("%s","MCP2515 is NOT in configuration mode after reset!\n");
     return 1;
@@ -57,7 +56,7 @@ uint8_t mcp2515_bit_modify(uint8_t address, uint8_t mask, uint8_t data){
   SPI_master_transmit(mask);
   SPI_master_transmit(data);
   PORTB|=(1<<4); //Deselect can-controller
-  return mcp2515_read(address); //returnerer resultatet fra bitmodifiseringen
+  return mcp2515_read(address); //returns the result from the bitmodifycation
 }
 
 uint8_t mcp2515_read_status(){

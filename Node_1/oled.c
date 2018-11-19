@@ -19,7 +19,6 @@ void write_c(char data){
 void oled_reset(void){
     *oled_command=0x00;//setting lower start column
     *oled_command=0x10;//setting upper start column
-    //*oled_command=0x40; //setinng display start line
     for (int i = 0; i <8;i++){
         *oled_command=0xb0+i;//setting start page0
         for(int j = 0; j<128;j++){
@@ -56,28 +55,12 @@ void oled_init(){
     SRAM_OLED_reset();
 }
 
-
-/*void oled_write_character_font8(char letter){
-    char letterline = letter - ' ';
-    for(int i = 0; i<8; i++){
-        *oled_data=pgm_read_byte(&font8[letterline][i]);
-    }
-}*/
-
 void SRAM_oled_write_character_font8(uint8_t line, uint8_t column, char letter){
     char letterline = letter - ' ';
     for(int i = 0; i<8; i++){
         SRAM_write_to_mem(line,column+i,pgm_read_byte(&font8[letterline][i]));
     }
 }
-
-/*void oled_write_character_font5(char letter){
-    char letterline = letter - ' ';
-    for(int i = 0; i<5; i++){
-        *oled_data=pgm_read_byte(&font5[letterline][i]);
-    }
-}*/
-
 
 void SRAM_oled_write_character_font5(uint8_t line, uint8_t column, char letter){
     char letterline = letter - ' ';
@@ -86,22 +69,12 @@ void SRAM_oled_write_character_font5(uint8_t line, uint8_t column, char letter){
     }
 }
 
-/*void oled_write_character_font4(char letter){
-    char letterline = letter - ' ';
-    for(int i = 0; i<4; i++){
-        *oled_data=pgm_read_byte(&font4[letterline][i]);
-    }
-}*/
-
-
 void SRAM_oled_write_character_font4(uint8_t line, uint8_t column, char letter){
     char letterline = letter - ' ';
     for(int i = 0; i<4; i++){
         SRAM_write_to_mem(line,column+i,pgm_read_byte(&font4[letterline][i]));
     }
 }
-// Må lage nye write funksjoner for SRAM her som funker til menyen
-
 
 void oled_goto_line(uint8_t line){ //0-7 lines/pages
     *oled_command=0xb0+line;//setting start page to line
@@ -114,7 +87,6 @@ void oled_goto_column(uint8_t column){ //0-127 columns
 void oled_clear_line(uint8_t line){
     *oled_command=0x00;//setting lower start column
     *oled_command=0x10;//setting upper start column
-    //*oled_command=0x40;//setting display start line
     *oled_command=0xb0+line;//setting start page0
     for(int j = 0; j<128;j++){
         *oled_data = 0x00;
@@ -126,37 +98,17 @@ void oled_pos(uint8_t row, uint8_t column) {
     oled_goto_line(row);
 }
 
-/*void oled_print4(char* word){
-    for(int i = 0; word[i]!='\0';i++){
-        oled_write_character_font4(word[i]);
-    }
-}*/
-
-
 void SRAM_oled_print4(uint8_t line, uint8_t column, char* word){
     for(int i = 0; word[i]!='\0';i++){
         SRAM_oled_write_character_font4(line, column+i*4, word[i]);
     }
 }
 
-/*void oled_print5(char* word){
-    for(int i = 0; word[i]!='\0';i++){
-        oled_write_character_font5(word[i]);
-    }
-}*/
-
-
 void SRAM_oled_print5(uint8_t line, uint8_t column, char* word){
     for(int i = 0; word[i]!='\0';i++){
         SRAM_oled_write_character_font5(line, column+i*5, word[i]);
     }
 }
-
-/*void oled_print8(char* word){
-    for(int i = 0; word[i]!='\0';i++){
-        oled_write_character_font8(word[i]);
-    }
-}*/
 
 void SRAM_oled_print8(uint8_t line, uint8_t column,char* word){
     for(int i = 0; word[i]!='\0';i++){
@@ -197,13 +149,9 @@ void draw_line(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2){
 void print_pixel(uint8_t x, uint8_t y){
     uint8_t row = y/8;
     uint8_t column = x;
-    //oled_pos(row,column);
-    //*oled_data |=(1<<(y%8));
     SRAM_write_to_mem(row,column,SRAM_read_oled_data(row,column)|(1<<(y%8)));
 }
 
-//dir = 0, halvsirkel i negativt y-plan
-//dir = 1, halvsirkel i positivt y-plan
 void draw_half_circle(uint8_t x0, uint8_t y0, uint8_t r, int dir){
     for(uint8_t x = x0-r; x<= x0 + r; x++){
         if (dir == 0){
@@ -235,14 +183,13 @@ void draw_half_circle(uint8_t x0, uint8_t y0, uint8_t r, int dir){
     }
 }
 
-
 void draw_smiley(uint8_t x0, uint8_t y0, uint8_t r){
     //Face
     draw_circle(x0,y0,r);
 
     //Mouth
     draw_line(x0-2,x0+2, y0+2, y0+2);
-    draw_half_circle(x0,y0+2,4,1); //må kanskje endre dir
+    draw_half_circle(x0,y0+2,4,1);
 
     //Nose
     draw_line(x0,x0, y0-1, y0+1);
@@ -251,9 +198,7 @@ void draw_smiley(uint8_t x0, uint8_t y0, uint8_t r){
     draw_circle(x0-2, y0-2, 1);
     draw_line(x0-3,x0-1, y0-2,y0-2);
 
-
     //Right eye
     draw_circle(x0+2, y0-2, 1);
     draw_line(x0+1,x0+3, y0-2,y0-2);
-
 }

@@ -33,16 +33,12 @@ int USART_Receive(FILE* _notused){
     return UDR0;
 }
 
-
-
 void USART_test(){
     USART_Init(MYUBRR);
-    //_delay_ms(10000);
     USART_Transmit('A',NULL);
     printf("hei\r\n");
     while(1){
         USART_Transmit(USART_Receive(NULL),NULL);
-        //unsigned char k = USART_Receive();
         _delay_ms(2);
     }
 

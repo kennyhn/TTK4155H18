@@ -7,7 +7,7 @@
 int can_loopback_init(){
   if (mcp2515_init()){ //Setup mcp while checking if it is set up right
     return 1; //If mcp2515 is not set up right
-  } //mulig vi må legge inn en while løkke her
+  }
   mcp2515_write(MCP_CANCTRL, MODE_LOOPBACK); //Changing CAN to loopback mode
   if (!(mcp2515_read(MCP_CANSTAT) & MODE_LOOPBACK)){
     printf("The CAN is NOT in loopback mode\n");
@@ -49,8 +49,6 @@ int can_normal_init(){
 }
 
 void can_message_send(can_message* message){
-  //while (!can_transmit_complete());
-
   //Splitting id into higher and lower MSBs/LSBs
   unsigned id_high = message->id & 0b11111111000;
   unsigned id_low = message->id & 0b00000000111;
@@ -109,7 +107,6 @@ void send_console_message(uint8_t K_p,uint8_t K_i){
   msg.data[2]=slider.right_slider_value;
   msg.data[3]=K_p;
   msg.data[4]=K_i;
-  //printf("K_p %d\nK_i %d\n",msg.data[3],K_i);
   if (can_allowed_to_send_flag){
     can_message_send(&msg);
     can_allowed_to_send_flag=0;
@@ -137,6 +134,6 @@ void can_receive_interrupt_init(void){
   can_message_received = 0;
 }
 
-ISR(INT0_vect){
+ISR(INT0_vect){ //can message received interrupt
   can_message_received = 1;
 }

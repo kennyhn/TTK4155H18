@@ -50,9 +50,7 @@ void SRAM_OLED_reset(){ //empties the screen mem space in SRAM
 
 void SRAM_write_to_mem(uint8_t page, uint8_t column, uint8_t screen_data){ //writes to SRAM the data in given page and column
     volatile char *ext_ram= (char*) 0x1BFF; //start address for the screen in SRAM
-    //uint16_t ext_ram_size = 0x400; //size of memspace for screen
     ext_ram[page*128+column]=screen_data;
-    //ext_rad[adress] = screen data;
 }
 
 

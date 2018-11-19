@@ -12,14 +12,14 @@ void menu_driver(uint8_t* K_p,uint8_t* K_i,joystick_direction* dir, menu_element
   joystick_direction prev_dir = *dir;
 
   *dir = check_joystick_direction(adc);
-  if (prev_dir == NEUTRAL){
-    if (*dir == UP && (*menu_choice)->up!=NULL){
+  if (prev_dir == NEUTRAL){ // makes direction change via NEUTRAL necessary to move in the menu
+    if (*dir == UP && (*menu_choice)->up!=NULL){ // up
         *menu_choice=(*menu_choice)->up;
     }
-    else if (*dir == DOWN && (*menu_choice)->down!=NULL){
+    else if (*dir == DOWN && (*menu_choice)->down!=NULL){ //down
         *menu_choice=(*menu_choice)->down;
     }
-    else if(*dir == RIGHT && (*menu_choice)->choose!=NULL){
+    else if(*dir == RIGHT && (*menu_choice)->choose!=NULL){ //right
         *menu_choice=(*menu_choice)->choose;
         if ((*menu_choice)->name == "Game"){
           play_game(*K_p, *K_i);
@@ -29,7 +29,7 @@ void menu_driver(uint8_t* K_p,uint8_t* K_i,joystick_direction* dir, menu_element
         }
         print_page(*menu_choice);
     }
-    else if(*dir==LEFT && (*menu_choice)->back!=NULL){
+    else if(*dir==LEFT && (*menu_choice)->back!=NULL){ //left
         *menu_choice=(*menu_choice)->back;
         print_page(*menu_choice);
     }
@@ -38,6 +38,7 @@ void menu_driver(uint8_t* K_p,uint8_t* K_i,joystick_direction* dir, menu_element
     if ((*menu_choice)->name != "Score" && (*menu_choice)->name != "Highscore table"){
       print_marker((*menu_choice)->line);
     }
+    //the diffenrent difficulty levels
     if ((*menu_choice)->name == "Easy"){
       *K_p = 1;
       *K_i = 1;
@@ -50,18 +51,16 @@ void menu_driver(uint8_t* K_p,uint8_t* K_i,joystick_direction* dir, menu_element
 }
 
 menu_element* create_menu_element(char* name,uint8_t line, menu_element* up, menu_element* down, menu_element* choose, menu_element* back){
-    menu_element* e = malloc(sizeof(*e));
+    menu_element* e = malloc(sizeof(*e)); //dynamically allocating a menu element
     e->name=name;
     e->line=line;
     e->up=up;
     e->down=down;
     e->choose=choose;
     e->back=back;
-    //e->function_peker=
     return e;
 }
 
-//bruker sram
 void print_page(menu_element* node){
   SRAM_OLED_reset();
   if (node->name == "Score"){
@@ -94,7 +93,6 @@ void print_page(menu_element* node){
   }
 }
 
-//bruker SRAM
 void print_marker(uint8_t line){
   for (int i = 2; i <8;i++){ //changed i to not clear i first lines
       for(int j = 0; j<5;j++){

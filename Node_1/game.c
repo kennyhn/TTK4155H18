@@ -15,7 +15,7 @@ uint8_t play_game(uint8_t K_p,uint8_t K_i){
     if (can_message_received){
       can_message_received = 0;
       can_data_receive();
-      _delay_ms(100); //this might possibly need to be bigger or smaller
+      _delay_ms(100); // needed to receive a new can message
       if (can_message_received){
         can_message_received = 0;
         can_data_receive();

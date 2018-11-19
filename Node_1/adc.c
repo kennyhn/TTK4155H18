@@ -6,40 +6,34 @@
 #include <avr/interrupt.h>
 
 uint8_t joystick_y_axis(volatile uint8_t *adc){
-  _delay_us(1);
+  _delay_us(1); //from the datasheet (600ns)
   *adc = 0x04;
-  while(!adc_is_ready_flag);
+  while(!adc_is_ready_flag); //waiting for the adc conversion done interrupt
   adc_is_ready_flag=0;
-  //printf("Y-axis: %d\n",*adc);
   return *adc;
 }
 
 uint8_t joystick_x_axis(volatile uint8_t *adc){
-  _delay_us(1);
+  _delay_us(1); //from the datasheet (600ns)
   *adc = 0x05;
-  while(!adc_is_ready_flag);
+  while(!adc_is_ready_flag); //waiting for the adc conversion done interrupt
   adc_is_ready_flag=0;
   printf("X-axis: %d\n",*adc);
   return *adc;
 }
 
-
-// L-slider midten nede
-//l-button er midten oppe
 uint8_t l_slider(volatile uint8_t *adc){
-  _delay_us(1);
+  _delay_us(1); //from the datasheet (600ns)
   *adc = 0x06;
-  while(!adc_is_ready_flag);
+  while(!adc_is_ready_flag); //waiting for the adc conversion done interrupt
   adc_is_ready_flag=0;
   return *adc;
 }
 
-// R-slider oppe til ventre
-//r-button er under r-slider
 uint8_t r_slider(volatile uint8_t *adc){
-  _delay_us(1);
+  _delay_us(1); //from the datasheet (600ns)
   *adc = 0x07;
-  while(!adc_is_ready_flag);
+  while(!adc_is_ready_flag); //waiting for the adc conversion done interrupt
   adc_is_ready_flag=0;
   return *adc;
 }
@@ -54,11 +48,9 @@ joystick_perc_angle get_perc_angle(volatile uint8_t *adc){
     return jpa;
 }
 
-
-
 joystick_direction check_joystick_direction(volatile uint8_t *adc){
     joystick_perc_angle jpa = get_perc_angle(adc);
-    if(abs(jpa.X_value) < 20 && abs(jpa.Y_value) < 20 ){
+    if(abs(jpa.X_value) < 20 && abs(jpa.Y_value) < 20 ){ // 20 is the limit for passing NEUTRAL
         return NEUTRAL;
     }
     else{
@@ -97,6 +89,6 @@ void adc_interrupt_init(void){
 
 }
 
-ISR(INT2_vect){
+ISR(INT2_vect){ //adc interrupt when conversion is done
   adc_is_ready_flag = 1;
 }

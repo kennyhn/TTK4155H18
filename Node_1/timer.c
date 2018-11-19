@@ -7,7 +7,7 @@
 #include <avr/interrupt.h>
 
 #define F_CPU 4915200
-#define PERIOD 1/60 //frekvensen 1/Hz
+#define PERIOD 1/60
 #define PRESCALER 1024
 
 //int=F_CPU/PRESCALER*period
@@ -15,9 +15,8 @@ void timer_interrupt_init(void){
   cli();
   TCCR0 |= (1<<WGM01);//Want to use CTC mode so the timer is cleared on comparison
   TCCR0 |= (1<<CS02) | (1<<CS00);//Sets 1024
-  OCR0 = (F_CPU/PRESCALER)*PERIOD;//Setter top value
+  OCR0 = (F_CPU/PRESCALER)*PERIOD;//Setting top value
   TIMSK |= (1<<OCIE0);//Enable interrupt
-  //TCNT0 = 0;
   sei();
   can_allowed_to_send_flag=0;
   timer_flag=0;
