@@ -186,6 +186,8 @@ void mcp2515_reset();
 uint8_t mcp2515_read(uint8_t address);
 
 /**@brief Functions writing data to a given address in the can controller.
+ *@param address takes in the address the data is written to
+ *@param data takes in the data which is written to the address given
  */
 void mcp2515_write(uint8_t address, uint8_t data);
 

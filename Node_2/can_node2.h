@@ -19,11 +19,11 @@ typedef struct Can_message{
 }can_message;
 
 
-/**@brief Initialising the can controller to loopback mode.
+/**@brief Initializing the can controller to loopback mode.
  */
 int can_loopback_init();
 
-/**@brief Initialising the can controller to normal mode.
+/**@brief Initializing the can controller to normal mode.
  */
 int can_normal_init();
 
@@ -45,13 +45,13 @@ can_message can_data_receive(void);
  */
 void receive_console_message(joystick_raw_data* jrd, joystick_direction* jd, slider_raw_data* srd);
 
-/**@brief Functu\ion that returns all the can interrupt flags.
+/**@brief Function that returns all the can interrupt flags.
  *
  * @return uint8_t the 8 different interupt flags.
  */
 uint8_t can_int_vect();
 
-/**@brief Function that initialises the receive interupt we are using.
+/**@brief Function that initializes the receive interupt we are using.
  */
 void can_interrupt_init();
 #endif

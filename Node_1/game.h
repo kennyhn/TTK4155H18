@@ -35,22 +35,19 @@ void save_high_score(uint8_t value);
 
 /**@brief prints out the score screen in OLED
  *
- *The message that is sent is "bounced" back. This is used to see if the SPI-bus between the CAN-controller and CAN-tranceiver is correctly setup
- *@return int which is a boolean value saying if the mode is successfully intialized.
+ *Prints out the score screen in OLED, with a function making it available for the user to add their name to the high score list using putty.
  */
 void print_score(void);
 
-/**@brief Initialize the CAN in loopback mode
+/**@brief prints out the high score screen in OLED
  *
- *The message that is sent is "bounced" back. This is used to see if the SPI-bus between the CAN-controller and CAN-tranceiver is correctly setup
- *@return int which is a boolean value saying if the mode is successfully intialized.
+ *Uses all data in SRAM to make the high score list with name and points.
  */
 void print_high_score(void);
 
-/**@brief Initialize the CAN in loopback mode
+/**@brief Prints out the game screen in OLED
  *
- *The message that is sent is "bounced" back. This is used to see if the SPI-bus between the CAN-controller and CAN-tranceiver is correctly setup
- *@return int which is a boolean value saying if the mode is successfully intialized.
+ *Prints out the animation in OLED which runs meanwhile the game is playing. It also shows the score the user has under the game.
  */
 void print_game_screen(void);
 #endif

@@ -168,13 +168,45 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_WAKIF		0x40
 #define MCP_MERRF		0x80
 
-
+/**@brief Initialising the can controller.
+ *
+ */
 uint8_t mcp2515_init();
+
+/**@brief Reseting the can controller.
+ *
+ * Used in the initialisation.
+ */
 void mcp2515_reset();
+
+/**@brief Function reading a given address in the can controller.
+ *
+ * @param address This is the address being read.
+ * @return uint8_t The data on the @param address.
+ */
 uint8_t mcp2515_read(uint8_t address);
+
+/**@brief Functions writing data to a given address in the can controller.
+ *
+ *@param address takes in the address the data is written to
+ *@param data takes in the data which is written to the address given
+ */
 void mcp2515_write(uint8_t address, uint8_t data);
+
+/**@brief Function requesting to send data to can controller.
+ *
+ */
 void mcp2515_request_to_send(uint8_t command);
+
+/**@brief Function using a mask to change certain data bits at a given adress in the can controller.
+ *
+ * @return uint8_t Returning the resulting modified data.
+ */
 uint8_t mcp2515_bit_modify(uint8_t address, uint8_t mask, uint8_t data);
+
+/**@brief Function that returns the status of the SPI bus.
+ *
+ */
 uint8_t mcp2515_read_status();
 
 #endif
