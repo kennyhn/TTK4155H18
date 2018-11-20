@@ -7,7 +7,7 @@
 #include <stdint.h>
 
 volatile uint8_t timer_flag;
-
+volatile uint8_t frame_rate_flag;
 /**@brief Initialize the timer interrupt for node 1
  *
  *Sets the register neccessary to get an interrupt every 1/60 seconds (60Hz)

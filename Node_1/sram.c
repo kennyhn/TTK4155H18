@@ -3,6 +3,7 @@
 
 #include "sram.h"
 #include "oled.h"
+#include "timer.h"
 #include <avr/io.h>
 
 
@@ -56,17 +57,19 @@ void SRAM_write_to_mem(uint8_t page, uint8_t column, uint8_t screen_data){ //wri
 
 
 void SRAM_writes_to_screen(){
-    volatile char *ext_ram= (char *) 0x1BFF; //start address for the screen in SRAM
-    uint16_t ext_ram_size = 0x400; //size of memspace for screen
-    volatile char *oled_data = (char*) 0x1200;
-    int j = 0;
+  volatile char *ext_ram= (char *) 0x1BFF; //start address for the screen in SRAM
+  uint16_t ext_ram_size = 0x400; //size of memspace for screen
+  volatile char *oled_data = (char*) 0x1200;
+  int j = 0;
+  if (frame_rate_flag){
     for(int i = 0; i<ext_ram_size; i++){
         if (i%128==0){
             oled_pos(j,0);
             j++;
+          }
+          *oled_data = ext_ram[i];
         }
-        *oled_data = ext_ram[i];
-    }
+      }
 }
 
 uint8_t SRAM_read_oled_data(uint8_t page, uint8_t column){

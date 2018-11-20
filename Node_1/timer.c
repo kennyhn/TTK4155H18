@@ -20,11 +20,14 @@ void timer_interrupt_init(void){
   sei();
   can_allowed_to_send_flag=0;
   timer_flag=0;
+  frame_rate_flag=1;
 }
 
 
 ISR(TIMER0_COMP_vect){
   static uint32_t counter = 0;
+
+  frame_rate_flag=1; //Flag is set with a frequency of 60 Hz
 
   //Flag is set every 50ms
   if ((counter%3)==0){

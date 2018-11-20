@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
+
 /**@brief Empties the OLED part of the SRAM.
  *
  *Sets all bits in this part of the SRAM to 0

@@ -1,0 +1,5 @@
+<map id="Node_1/adc.h" name="Node_1/adc.h">
+<area shape="rect" id="node2" href="$menu_8h.html" title="Functions for running the menu. " alt="" coords="5,80,120,107"/>
+<area shape="rect" id="node3" href="$can__node2_8h.html" title="Functions running and operating this can node. " alt="" coords="145,80,290,107"/>
+<area shape="rect" id="node4" href="$motor__node2_8h.html" title="Functions controlling the motor and the encoder. " alt="" coords="315,80,472,107"/>
+</map>

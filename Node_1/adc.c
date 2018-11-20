@@ -18,7 +18,6 @@ uint8_t joystick_x_axis(volatile uint8_t *adc){
   *adc = 0x05;
   while(!adc_is_ready_flag); //waiting for the adc conversion done interrupt
   adc_is_ready_flag=0;
-  printf("X-axis: %d\n",*adc);
   return *adc;
 }
 
